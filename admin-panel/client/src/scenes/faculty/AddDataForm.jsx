@@ -9,11 +9,13 @@ import { useAddFacultyMutation } from "../../state/api";
 function AddDataForm() {
   const theme = useTheme();
   const { register, handleSubmit } = useForm();
-  const [imagePreview, setImagePreview] = useState(null);
+  // const [imagePreview, setImagePreview] = useState(null);
   const [saveFormData] = useAddFacultyMutation();
+    const [imagePath, setImagePath] = useState(null);
 
 
   const onSubmit = (data) => {
+    data.facultyImg = JSON.stringify(imagePath || "");
   saveFormData(data)
     .unwrap()
     .then((response) => {
@@ -25,19 +27,8 @@ function AddDataForm() {
 }
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+  // setImagePath(reader.result); 
   
-  if (file) {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImagePreview(reader.result);
-      
-      
-    };
-    reader.readAsDataURL(file);
-  } else {
-    setImagePreview(null);
-    
-  }
 };
 return (
     <Box m="1.5rem 2.5rem">

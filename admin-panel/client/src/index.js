@@ -7,7 +7,7 @@ import globalReducer from "./state";
 import { Provider } from "react-redux";
 import {api} from "./state/api";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { Auth0Provider } from "@auth0/auth0-react";
+import { AuthProvider } from "../src/components/AuthContext";
 
 const store = configureStore({
   reducer: {
@@ -20,15 +20,9 @@ setupListeners(store.dispatch);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <Auth0Provider
-    domain="dev-c4r8f2bqnkfsro87.us.auth0.com"
-    clientId="dNtaLWLenPvSRIzKgbdoIDjvZnGH7kOU"
-    authorizationParams={{
-      redirect_uri: window.location.origin,
-    }}
-  >
+  <AuthProvider>
     <Provider store={store}>
       <App />
     </Provider>
-  </Auth0Provider>
+  </AuthProvider>
 );

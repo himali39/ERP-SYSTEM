@@ -104,7 +104,7 @@ const Faculty = () => {
             "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
           }}
         >
-          {data.map(
+          {data?.map(
             ({
               facultyImg,
               facultyName,

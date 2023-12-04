@@ -24,9 +24,9 @@ const {
   // dataProduct,
 } = require("./src/data/data.js");
 
+const app = express();
 /** configuration*/
 dotenv.config();
-const app = express();
 app.use(express.json());
 app.use(helmet());
 app.use(

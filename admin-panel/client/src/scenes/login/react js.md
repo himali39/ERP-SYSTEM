@@ -12,3 +12,9 @@ node js
 addData get api create with multer through file upload
 dashboard page data get create
 
+<!-- 4 Dec -->
+I have worked through some data comment issues that were resolved in my GitHub account in a few hours,
+I have learned some GitHub setting 
+and I have set all page login authorization using useAuth,useContext and  create privateRoute and
+I have worked in  login admin validation and password visibility
+and I am working on getting image data from database(in working)
