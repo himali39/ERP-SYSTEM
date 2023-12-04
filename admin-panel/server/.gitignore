@@ -1,0 +1,4 @@
+# Node-Modules file
+/node_modules/
+
+# .env
