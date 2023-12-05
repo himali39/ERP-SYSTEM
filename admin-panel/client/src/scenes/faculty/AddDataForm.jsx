@@ -9,28 +9,37 @@ import { useAddFacultyMutation } from "../../state/api";
 function AddDataForm() {
   const theme = useTheme();
   const { register, handleSubmit } = useForm();
-  // const [imagePreview, setImagePreview] = useState(null);
+ 
   const [saveFormData] = useAddFacultyMutation();
-    const [imagePath, setImagePath] = useState(null);
+  const [image, setImage] = useState(null);
 
-
-  const onSubmit = (data) => {
-    data.facultyImg = JSON.stringify(imagePath || "");
-  saveFormData(data)
-    .unwrap()
-    .then((response) => {
-      console.log("Mutation response:", response);
-    })
-    .catch((error) => {
-      console.error("Mutation error:", error);
-    });
-}
-  const handleFileChange = (e) => {
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
-  // setImagePath(reader.result); 
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   
-};
-return (
+  const onSubmit = (data) => {
+      if (image) {
+        data.image = image; // Add image data to your form data
+      }
+    saveFormData(data)
+      .unwrap()
+      .then((response) => {
+        console.log("Mutation response:", response);
+      })
+      .catch((error) => {
+        console.error("Mutation error:", error);
+      });
+    console.log("data", data);
+    // window.location.href = "/faculty";
+  };
+  return (
     <Box m="1.5rem 2.5rem">
       <FlexBetween>
         <Header title="FACULTY" subtitle="Add new Faculty Data." />
@@ -44,15 +53,11 @@ return (
       >
         <Box width=" 45rem" p="2rem">
           <form onSubmit={handleSubmit(onSubmit)}>
-            <TextField
-              fullWidth
+            <input
               type="file"
-              id="outlined-basic"
-              variant="outlined"
-              {...register("facultyImg")}
-              name="facultyImg"
-              onChange={handleFileChange}
-              
+              onChange={handleImageChange}
+              accept="image/*"
+              style={{ marginTop: "20px" }}
             />
             <TextField
               fullWidth

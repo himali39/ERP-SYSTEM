@@ -22,10 +22,10 @@ export const api = createApi({
       providesTags: ["Faculty"],
     }),
     addFaculty: build.mutation({
-      query: (faculty) => ({
+      query: (data) => ({
         url: "/faculty/addfaculty",
         method: "POST",
-        body: faculty,
+        body: data,
       }),
     }),
   }),

@@ -1,4 +1,4 @@
-const mongoose =require( "mongoose");
+const mongoose = require("mongoose");
 
 const FacultySchema = new mongoose.Schema(
   {
@@ -25,16 +25,16 @@ const FacultySchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    toJSON: {
-      transform: function (doc, data) {
-        if (data?.facultyImg) {
-          data.facultyImg = `${process.env.BASE_URL}faculty_images/${data.facultyImg}`;
-        }
-      },
-    },
+    // toJSON: {
+    //   transform: function (doc, data) {
+    //     if (data?.facultyImg) {
+    //       data.facultyImg = `${process.env.BASE_URL}faculty_images/${data.facultyImg}`;
+    //     }
+    //   },
+    // },
   }
 );
 
 const Faculty = mongoose.model("Faculty", FacultySchema);
 
-module.exports=Faculty;
+module.exports = Faculty;

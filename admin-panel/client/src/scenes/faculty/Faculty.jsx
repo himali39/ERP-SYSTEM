@@ -36,7 +36,7 @@ const Facultys = ({
           <img
             width="100%"
             height="220px"
-            src={`${process.env.REACT_APP_BASE_URL}${facultyImg}`}
+            src={`${process.env.REACT_APP_BASE_URL_FACULTY}${facultyImg}`}
             alt={facultyName}
           />
         </Typography>

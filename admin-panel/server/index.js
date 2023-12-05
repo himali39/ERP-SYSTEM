@@ -44,7 +44,7 @@ app.use(
 app.use(cors());
 
 /**UPLOAD FILE */
-app.use(express.static(path.join(__dirname, "./src/public")));
+app.use(express.static(path.join(__dirname, "./src/public/")));
 
 /**ROUTES */
 app.use("/general", generalRoutes);
