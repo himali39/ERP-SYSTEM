@@ -5,7 +5,7 @@ export const api = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_BASE_URL }),
 
   reducerPath: "adminApi",
-  tagTypes: ["User", "Dashboard", "Faculty"],
+  tagTypes: ["User", "Dashboard", "Faculty", "logindata"],
 
   endpoints: (build) => ({
     getUser: build.query({
@@ -28,7 +28,20 @@ export const api = createApi({
         body: data,
       }),
     }),
+    adminLogin: build.mutation({
+      query: (logindata) => ({
+        url: "/auth/login",
+        method: "POST",
+        body: logindata,
+      }),
+    }),
   }),
 });
 
-export const { useGetUserQuery, useGetDashboardQuery, useGetFacultyQuery,useAddFacultyMutation } = api;
+export const {
+  useGetUserQuery,
+  useGetDashboardQuery,
+  useGetFacultyQuery,
+  useAddFacultyMutation,
+  useLoginQuery,
+} = api;

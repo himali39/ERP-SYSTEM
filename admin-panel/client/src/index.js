@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import { configureStore } from "@reduxjs/toolkit";
-import globalReducer from "./state";
+import {globalReducer, userReducer} from "./state";
 import { Provider } from "react-redux";
 import {api} from "./state/api";
 import { setupListeners } from "@reduxjs/toolkit/query";
@@ -12,8 +12,10 @@ import { AuthProvider } from "../src/components/AuthContext";
 const store = configureStore({
   reducer: {
     global: globalReducer,
+    user: userReducer,
     [api.reducerPath]: api.reducer, //api.js
   },
+
   middleware: (getDefault) => getDefault().concat(api.middleware),
 });
 setupListeners(store.dispatch);

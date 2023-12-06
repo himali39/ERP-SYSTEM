@@ -14,8 +14,8 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const ext = path.extname(file.originalname);
-    if (ext !== ".png" && ext !== ".jpg" && ext !== ".jpeg") {
-      cb("Only .png, .jpg and .jpeg format are allowed!");
+    if (ext !== ".png" && ext !== ".jpg" && ext !== ".jpeg" && ext !== ".webp") {
+      cb("Only .png, .jpg, .jpeg and .webp format are allowed!");
     }
     cb(null, new Date().getTime() + ext);
   },

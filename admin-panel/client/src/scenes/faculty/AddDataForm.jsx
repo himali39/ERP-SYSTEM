@@ -1,34 +1,32 @@
 import { useTheme } from "@emotion/react";
 import { Box, Button, TextField } from "@mui/material";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import FlexBetween from "../../components/FlexBetween";
 import Header from "../../components/Header";
 import { useAddFacultyMutation } from "../../state/api";
+import { useNavigate } from "react-router-dom";
+
 
 function AddDataForm() {
   const theme = useTheme();
   const { register, handleSubmit } = useForm();
- 
   const [saveFormData] = useAddFacultyMutation();
-  const [image, setImage] = useState(null);
+    const navigate = useNavigate();
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-  
   const onSubmit = (data) => {
-      if (image) {
-        data.image = image; // Add image data to your form data
+    /**Multipart formdata object*/
+    let formData = new FormData();
+
+    Object.keys(data).forEach(function (key) {
+      if (key === "facultyImg") {
+        formData.append(key, data[key][0]);
+      } else {
+        formData.append(key, data[key]);
       }
-    saveFormData(data)
+    });
+
+    /**Using FacultyMutation API through save form data  */
+    saveFormData(formData)
       .unwrap()
       .then((response) => {
         console.log("Mutation response:", response);
@@ -36,8 +34,9 @@ function AddDataForm() {
       .catch((error) => {
         console.error("Mutation error:", error);
       });
-    console.log("data", data);
-    // window.location.href = "/faculty";
+   
+/**Navigate faculty page*/
+   navigate("/faculty");
   };
   return (
     <Box m="1.5rem 2.5rem">
@@ -53,12 +52,17 @@ function AddDataForm() {
       >
         <Box width=" 45rem" p="2rem">
           <form onSubmit={handleSubmit(onSubmit)}>
-            <input
+            <TextField
+              fullWidth
               type="file"
-              onChange={handleImageChange}
+              id="outlined-basic"
+              variant="outlined"
               accept="image/*"
-              style={{ marginTop: "20px" }}
+              {...register("facultyImg")}
+              name="facultyImg"
+              // onChange={handleImageChange}
             />
+
             <TextField
               fullWidth
               id="outlined-basic"

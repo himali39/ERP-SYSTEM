@@ -7,12 +7,10 @@ const createFaculty = async (req, res) => {
     /** file upload*/
     if (req.file) {
       reqbody.facultyImg = req.file.filename;
-     } 
-     console.log(reqbody.facultyImg);
-    //  else {
-    //   throw new Error("faculty Img is required!");
-    // }
-    
+    } else {
+      throw new Error("faculty Img is required!");
+    }
+
     const faculty = await Faculty.create(reqbody);
     if (!faculty) {
       return res.status(404).json({ message: "Faculty not found" });

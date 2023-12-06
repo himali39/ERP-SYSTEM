@@ -113,7 +113,7 @@ const Faculty = () => {
               id,
             }) => (
               <Facultys
-                key={id}
+                key={facultyName}
                 facultyImg={facultyImg}
                 facultyName={facultyName}
                 facultyAddress={facultyAddress}

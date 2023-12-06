@@ -8,6 +8,7 @@ const morgan = require("morgan");
 const path = require("path");
 const generalRoutes = require("./src/routes/generalRoutes.js");
 const facultyRoutes = require("./src/routes/facultyRoutes.js");
+const authRoutes = require("./src/routes/authRoutes.js");
 
 /**data imports */
 // import User from "./src/models/Usermodel.js";
@@ -49,6 +50,7 @@ app.use(express.static(path.join(__dirname, "./src/public/")));
 /**ROUTES */
 app.use("/general", generalRoutes);
 app.use("/faculty", facultyRoutes);
+app.use("/auth", authRoutes);
 
 /**MONGOOSE SETUP */
 const PORT = process.env.PORT || 9000;

@@ -8,30 +8,63 @@ import {
   Button,
   IconButton,
   InputAdornment,
-  Typography,
 } from "@mui/material";
 import { useTheme } from "@emotion/react";
-import Header from "../../components/Header";
-import FlexBetween from "../../components/FlexBetween";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { useDispatch } from "react-redux";
+import { useLoginQuery } from "../../state/api";
 
 const Login = () => {
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
+  
+  const onSubmit = async (data) => {
+    try {
+      console.log(data);
 
-  const onSubmit = (data) => {
-    console.log(data);
-    window.location.href = "/dashboard";
-    // Handle login logic here
+      // Dispatch the login action
+      const userCredentials = {
+        email: data.email,
+        password: data.password,
+      };
+
+      const response = await dispatch(useLoginQuery(userCredentials));
+
+      // Check if the login was successful
+      if (response.payload && response.payload.success) {
+        // Save user data to local storage
+        localStorage.setItem("user", JSON.stringify(response.payload.user));
+
+        // Redirect to the dashboard
+        window.location.href = "/dashboard";
+      } else {
+        // Handle login failure (show error message, etc.)
+        console.error("Login failed:", response.payload.message);
+      }
+    } catch (error) {
+      console.error("An error occurred during login:", error);
+    }
   };
+
+  // const onSubmit = (data) => {
+  //   console.log(data);
+  //   window.location.href = "/dashboard";
+
+  //   let userCredentials={
+  //     email,password
+  //   }
+  //   dispatch(uselogin(userCredentials));
+  //    };
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
@@ -62,13 +95,13 @@ const Login = () => {
             <TextField
               fullWidth
               id="outlined-basic"
-              label="UserName"
+              label="Email"
               variant="outlined"
               style={{ marginTop: "20px" }}
-              {...register("UserName", { required: "Username is required" })}
-              name="UserName"
-              error={!!errors.UserName}
-              helperText={errors.UserName?.message}
+              {...register("Email", { required: "Email is required" })}
+              name="Email"
+              error={!!errors.Email}
+              helperText={errors.Email?.message}
               InputProps={{
                 startAdornment: (
                   <PersonOutlineIcon style={{ marginRight: "8px" }} />
