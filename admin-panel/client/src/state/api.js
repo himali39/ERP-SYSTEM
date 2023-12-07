@@ -5,34 +5,34 @@ export const api = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_BASE_URL }),
 
   reducerPath: "adminApi",
-  tagTypes: ["User", "Dashboard", "Faculty", "logindata"],
+  tagTypes: ["User", "Dashboard", "Faculty", "data"],
 
-  endpoints: (build) => ({
-    getUser: build.query({
+  endpoints: (builder) => ({
+    getUser: builder.query({
       query: (id) => `/general/user/${id}`, //getuser from controller
       providesTags: ["User"],
     }),
 
-    getDashboard: build.query({
+    getDashboard: builder.query({
       query: () => `general/dashboard`, //getDashboard from controller
       providesTags: ["Dashboard"],
     }),
-    getFaculty: build.query({
+    getFaculty: builder.query({
       query: () => "faculty/facultyList",
       providesTags: ["Faculty"],
     }),
-    addFaculty: build.mutation({
+    addFaculty: builder.mutation({
       query: (data) => ({
         url: "/faculty/addfaculty",
         method: "POST",
         body: data,
       }),
     }),
-    adminLogin: build.mutation({
-      query: (logindata) => ({
+    adminLogin: builder.mutation({
+      query: (data) => ({
         url: "/auth/login",
         method: "POST",
-        body: logindata,
+        body: data
       }),
     }),
   }),
@@ -43,5 +43,5 @@ export const {
   useGetDashboardQuery,
   useGetFacultyQuery,
   useAddFacultyMutation,
-  useLoginQuery,
+  useAdminLoginMutation,
 } = api;

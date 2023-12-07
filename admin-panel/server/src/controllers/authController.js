@@ -9,6 +9,7 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     const findUser = await User.findOne({ email });
+    console.log("🚀 ~ file: authController.js:12 ~ login ~ findUser:", findUser)
 
     if (!findUser) {
       throw new Error("User not Found");

@@ -7,7 +7,7 @@ import {globalReducer, userReducer} from "./state";
 import { Provider } from "react-redux";
 import {api} from "./state/api";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { AuthProvider } from "../src/components/AuthContext";
+// import { AuthProvider } from "../src/components/AuthContext";
 
 const store = configureStore({
   reducer: {
@@ -22,9 +22,9 @@ setupListeners(store.dispatch);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <AuthProvider>
+  // <AuthProvider>
     <Provider store={store}>
       <App />
     </Provider>
-  </AuthProvider>
+  //  </AuthProvider> 
 );

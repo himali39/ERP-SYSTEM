@@ -1,5 +1,4 @@
-
- //Import necessary libraries
+//Import necessary libraries
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -15,12 +14,12 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useDispatch } from "react-redux";
-import { useLoginQuery } from "../../state/api";
+import { useAdminLoginMutation } from "../../state/api";
+import { selectUser } from "../../state";
 
 const Login = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
-  const 
   const {
     register,
     handleSubmit,
@@ -28,47 +27,22 @@ const Login = () => {
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
   
+  const [loginMutation] = useAdminLoginMutation();
+  
+
   const onSubmit = async (data) => {
     try {
-      console.log(data);
-
-      // Dispatch the login action
-      const userCredentials = {
-        email: data.email,
-        password: data.password,
-      };
-
-      const response = await dispatch(useLoginQuery(userCredentials));
-
-      // Check if the login was successful
-      if (response.payload && response.payload.success) {
-        // Save user data to local storage
-        localStorage.setItem("user", JSON.stringify(response.payload.user));
-
-        // Redirect to the dashboard
-        window.location.href = "/dashboard";
-      } else {
-        // Handle login failure (show error message, etc.)
-        console.error("Login failed:", response.payload.message);
-      }
+      console.log(data,"data");
+      const response = await loginMutation(data).unwrap();
+           
+      dispatch(selectUser(response)); // Assuming the response contains user details
     } catch (error) {
-      console.error("An error occurred during login:", error);
+      console.error("Login failed", error);
     }
   };
-
-  // const onSubmit = (data) => {
-  //   console.log(data);
-  //   window.location.href = "/dashboard";
-
-  //   let userCredentials={
-  //     email,password
-  //   }
-  //   dispatch(uselogin(userCredentials));
-  //    };
-  const handleTogglePassword = () => {
-    setShowPassword(!showPassword);
+    const handleTogglePassword = () => {
+      setShowPassword(!showPassword);
   };
-
   return (
     <Box m="1.5rem 2.5rem" position="absolute" top="20%" left="30%">
       <Box
