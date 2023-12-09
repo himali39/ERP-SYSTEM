@@ -13,38 +13,43 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { useDispatch } from "react-redux";
-import { useAdminLoginMutation } from "../../state/api";
-import { selectUser } from "../../state";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../../state";
 
 const Login = () => {
   const theme = useTheme();
-  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
-  
-  const [loginMutation] = useAdminLoginMutation();
-  
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading, error } = useSelector((state) => state.adminApi);
 
+  /* ------------------------- onsubmit data function ------------------------- */
   const onSubmit = async (data) => {
-    try {
-      console.log(data,"data");
-      const response = await loginMutation(data).unwrap();
-           
-      dispatch(selectUser(response)); // Assuming the response contains user details
-    } catch (error) {
-      console.error("Login failed", error);
-    }
+    await dispatch(loginUser(data));
+
+    dispatch(loginUser(data)).then((result) => {
+      if (result.error) {
+        console.log(result);
+      } else {
+        console.log("Asd");
+        navigate("/dashboard");
+      }
+    });
   };
-    const handleTogglePassword = () => {
-      setShowPassword(!showPassword);
+
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
   };
+
   return (
     <Box m="1.5rem 2.5rem" position="absolute" top="20%" left="30%">
+      {error}
       <Box
         backgroundColor={theme.palette.background.alt}
         p="1.5rem"
@@ -72,8 +77,8 @@ const Login = () => {
               label="Email"
               variant="outlined"
               style={{ marginTop: "20px" }}
-              {...register("Email", { required: "Email is required" })}
-              name="Email"
+              {...register("email", { required: "Email is required" })}
+              name="email"
               error={!!errors.Email}
               helperText={errors.Email?.message}
               InputProps={{
@@ -85,13 +90,13 @@ const Login = () => {
 
             <TextField
               fullWidth
-              id="outlined-basic"
+              id="outlined-basic1"
               label="Password"
               variant="outlined"
               type={showPassword ? "text" : "password"}
               style={{ marginTop: "20px" }}
-              {...register("Password", { required: "Password is required" })}
-              name="Password"
+              {...register("password", { required: "Password is required" })}
+              name="password"
               error={!!errors.Password}
               helperText={errors.Password?.message}
               InputProps={{
@@ -123,8 +128,9 @@ const Login = () => {
                   margin: "28px ",
                 }}
               >
-                Login
+                {loading ? "Loading..." : "Login"}
               </Button>
+              {error && <Box role="alert">{error}</Box>}
             </Box>
           </Box>
         </form>

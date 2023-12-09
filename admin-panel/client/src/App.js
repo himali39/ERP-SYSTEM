@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
-import { themeSettings } from "./theme";// Make sure to import your theme settings
+import { themeSettings } from "./theme"; // Make sure to import your theme settings
 import Layout from "./scenes/layout/layout";
 import Dashboard from "./scenes/dashboard/Dashboard";
 import Admin from "./scenes/admin/Admin";
@@ -18,9 +18,9 @@ import AddDataForm from "./scenes/faculty/AddDataForm";
 import Register from "./scenes/login/Register";
 
 function App() {
-    // const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  // const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-  const mode = useSelector((state) => state.global.mode);
+  const mode = useSelector((state) => state.reducer.global.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
 
   // const PublicRoute = ({ element }) => {
@@ -28,7 +28,7 @@ function App() {
   // };
 
   // const PrivateRoute = ({ element }) => {
-  
+
   //   console.log(isAuthenticated);
   //   return isAuthenticated ? element : <Navigate to="/login" replace />;
   // };
@@ -44,10 +44,10 @@ function App() {
             <Route path="/register" element={<Register />} />
             {/* </Route> */}
             <Route element={<Layout />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/faculty" element={<Faculty />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/add-data-form" element={<AddDataForm />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/faculty" element={<Faculty />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/add-data-form" element={<AddDataForm />} />
             </Route>
           </Routes>
           {/* <Routes>

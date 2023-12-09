@@ -10,11 +10,12 @@ import { useNavigate } from "react-router-dom";
 function AddDataForm() {
   const theme = useTheme();
   const { register, handleSubmit } = useForm();
-  // const [saveFormData] = useAddFacultyMutation();
   const [saveFormData] = useAddFacultyMutation();
     const navigate = useNavigate();
 
+    /* ------------------------------ submited data ----------------------------- */
   const onSubmit = (data) => {
+    
     /**Multipart formdata object*/
     let formData = new FormData();
 
@@ -26,7 +27,7 @@ function AddDataForm() {
       }
     });
 
-    /**Using FacultyMutation API through save form data  */
+  /* ------------ Using FacultyMutation API through save form data ------------ */
     saveFormData(formData)
       .unwrap()
       .then((response) => {

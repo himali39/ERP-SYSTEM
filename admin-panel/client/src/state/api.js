@@ -1,3 +1,4 @@
+//Api.js
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 /**API HOOK */
@@ -28,13 +29,7 @@ export const api = createApi({
         body: data,
       }),
     }),
-    adminLogin: builder.mutation({
-      query: (data) => ({
-        url: "/auth/login",
-        method: "POST",
-        body: data
-      }),
-    }),
+
   }),
 });
 
@@ -42,6 +37,5 @@ export const {
   useGetUserQuery,
   useGetDashboardQuery,
   useGetFacultyQuery,
-  useAddFacultyMutation,
-  useAdminLoginMutation,
+  useAddFacultyMutation
 } = api;

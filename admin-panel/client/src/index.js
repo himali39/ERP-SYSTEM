@@ -7,12 +7,12 @@ import {globalReducer, userReducer} from "./state";
 import { Provider } from "react-redux";
 import {api} from "./state/api";
 import { setupListeners } from "@reduxjs/toolkit/query";
+import rootReducer from "./state/rootReducer";
 // import { AuthProvider } from "../src/components/AuthContext";
 
 const store = configureStore({
   reducer: {
-    global: globalReducer,
-    user: userReducer,
+    reducer: rootReducer,
     [api.reducerPath]: api.reducer, //api.js
   },
 
