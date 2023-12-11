@@ -40,7 +40,7 @@ function App() {
           <CssBaseline />
           <Routes>
             {/* <Route path="/" element={<PublicRoute element={<Layout />} />}> */}
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />
             {/* </Route> */}
             <Route element={<Layout />}>

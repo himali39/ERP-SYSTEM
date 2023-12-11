@@ -15,7 +15,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../state";
+import { resetLoginState, loginUser } from "../../state";
 
 const Login = () => {
   const theme = useTheme();
@@ -27,20 +27,17 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useSelector((state) => state.adminApi);
+  const { loading, error } = useSelector((state) => state.reducer.userReducer);
 
   /* ------------------------- onsubmit data function ------------------------- */
   const onSubmit = async (data) => {
-    await dispatch(loginUser(data));
-
-    dispatch(loginUser(data)).then((result) => {
-      if (result.error) {
-        console.log(result);
-      } else {
-        console.log("Asd");
-        navigate("/dashboard");
-      }
-    });
+    // console.log(data, "data");
+    // await dispatch(resetLoginState);
+    await dispatch(loginUser(data))
+      .then((result) => {
+        !result.error && navigate("/dashboard");
+      })
+      .catch((error) => console.log(error.message));
   };
 
   const handleTogglePassword = () => {
@@ -49,7 +46,6 @@ const Login = () => {
 
   return (
     <Box m="1.5rem 2.5rem" position="absolute" top="20%" left="30%">
-      {error}
       <Box
         backgroundColor={theme.palette.background.alt}
         p="1.5rem"
@@ -57,6 +53,7 @@ const Login = () => {
         m="2.5rem"
         width="fit-content"
       >
+        {error}
         <Box textAlign="center">
           <PersonOutlineIcon
             style={{
