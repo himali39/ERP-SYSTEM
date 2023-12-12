@@ -1,13 +1,13 @@
 const OverallStat =require( "../models/OverallStatmodel.js");
 const Transaction =require( "../models/Transactionmodel.js");
-const User =require( "../models/Usermodel.js");
+const Admin =require( "../models/adminModel.js");
 
 /**Get user data */
  const getUser = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const user = await User.findById(id);
+    const user = await Admin.findById(id);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });

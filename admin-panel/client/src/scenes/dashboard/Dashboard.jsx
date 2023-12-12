@@ -11,9 +11,7 @@ const Dashboard = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const { data, isLoading } = useGetDashboardQuery();
-
-  console.log("Dashbord data", data);
-
+ 
   const columns = [
     {
       field: "_id",
@@ -93,6 +91,7 @@ const Dashboard = () => {
           borderRadius="0.55rem"
           // <OverviewChart view="sales" isDashboard={true} />
         ></Box>
+        
         <StatBox
           title="Monthly Sales"
           value={data && data.thisMonthStats.totalSales}

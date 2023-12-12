@@ -1,20 +1,37 @@
 import { useTheme } from "@emotion/react";
-import { AppBar, Box, Button, IconButton, InputBase, Menu, MenuItem, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Button,
+  IconButton,
+  InputBase,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
-// import { useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import FlexBetween from "./FlexBetween";
-import {ArrowDropDownOutlined, Search} from '@mui/icons-material';
+import { ArrowDropDownOutlined, Search } from "@mui/icons-material";
 import profileImage from "../assets/profile.jpeg";
+import {signout} from "../state/index";
 
-const Navbar=({ user, isSidebarOpen, setIsSidebarOpen })=> {
-  // const dispatch = useDispatch();
+const Navbar = ({ admin, isSidebarOpen, setIsSidebarOpen }) => {
+  console.log(admin)
+  const dispatch = useDispatch();
   const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const isOpen = Boolean(anchorEl);
   const handleClick = (event) => setAnchorEl(event.currentTarget);
-  const handleClose = () => setAnchorEl(null);
 
+  const handleClose = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    dispatch(signout());
+    // setAnchorEl(null);
+  }
   return (
     <AppBar
       sx={{
@@ -24,7 +41,6 @@ const Navbar=({ user, isSidebarOpen, setIsSidebarOpen })=> {
       }}
     >
       <Toolbar sx={{ justifyContent: "space-between" }}>
-
         {/* LEFT SIDE */}
         <FlexBetween
           backgroundColor={theme.palette.background.alt}
@@ -84,12 +100,12 @@ const Navbar=({ user, isSidebarOpen, setIsSidebarOpen })=> {
             onClose={handleClose}
             anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
           >
-            <MenuItem onClick={handleClose}>Log Out</MenuItem>
+            <MenuItem onClick={()=>handleClose()}>Log Out</MenuItem>
           </Menu>
         </FlexBetween>
       </Toolbar>
     </AppBar>
   );
-}
+};
 
 export default Navbar;

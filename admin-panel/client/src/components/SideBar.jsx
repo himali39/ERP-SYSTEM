@@ -120,7 +120,7 @@ const SideBar = ({
               <FlexBetween color={theme.palette.secondary.main}>
                 <Box display="flex" alignItems="center" gap="0.5rem">
                   <Typography variant="h4" fontWeight="bold">
-                    ECOMVISION
+                    ERP-SYSTEM
                   </Typography>
                 </Box>
                 {!isNonMobile && (

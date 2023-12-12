@@ -1,103 +1,107 @@
-const User = require("../models/Usermodel");
+const Admin = require("../models/adminModel");
 const bcrypt = require("bcrypt");
 const moment = require("moment");
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config;
 
-/**login api */
-// const login = async (req, res) => {
-//   try {
-//     const { email, password } = req.body;
+/* ---------------------------- Register admin Data ---------------------------- */
 
-//     const findUser = await User.findOne({ email: email });
-//     console.log(" findUser:", findUser);
+const register = async (req, res) => {
+  try {
+    const reqbody = req.body;
 
-//     if (!findUser) {
-//       // If the user is not found, return an error
-//       throw new Error("User not found");
-//     }
+    /** find email Id*/
+    const adminExist = await Admin.findOne({ email: reqbody.email });
 
-//     // const passwordsMatch = await comparePasswords(password, findUser.password);
+    if (adminExist) {
+      throw new Error(`Email already use ${reqbody.email} `);
+    }
 
-//     if (password == findUser.password) {
-//       console.log("findUser.password:", findUser.password);
-//       console.log("password:", password);
-//       // Create Token
+    /**create user by create service */
+    const admin = await Admin.create(reqbody);
 
-//       const payload = {
-//         email,
-//         expiresIn: moment().add(10, "minutes").unix(),
-//       };
+    /**create accesstoken */
+    const payload = {
+      name: reqbody.name,
+      email: reqbody.email,
+      expiresIn: moment().add(5, "minutes").unix(),
+    };
 
-//       // Create access token
-//       const accessToken = await jwt.sign(payload, process.env.JWT_SECRECT_KEY);
+    const accessToken = jwt.sign(payload, process.env.JWT_SECRECT_KEY);
 
-//       res.status(200).json({
-//         success: true,
-//         message: "User login successful!",
-//         accessToken: accessToken,
-//       });
-//     } else {
-//       // If passwords don't match, return authentication failed
-//       res.json({
-//         success: false,
-//         status: 401,
-//         message: "Authentication failed",
-//       });
-//     }
-//   } catch (err) {
-//     // Handle other errors (e.g., database errors, unexpected errors)
-//     res.status(400).json({
-//       success: false,
-//       message: err.message,
-//     });
-//   }
-// };
+    /**   generate Refresh Token */
+    const generateRefreshToken = (payload) => {
+      return jwt.sign(payload, process.env.JWT_REFRESH_SECRET_KEY);
+    };
 
-//Admin Login
+    const refreshToken = generateRefreshToken(payload);
+
+    const tokens = {
+      admin: admin,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    };
+
+    res.status(201).json({
+      success: true,
+      message: "Admin data create successfully !",
+      info: tokens,
+    });
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+};
+
+/* -------------------------------- login admin data ------------------------------- */
 const login = async (req, res, next) => {
   try {
-    const admin = await User.findOne({ email: req.body.email });
+    const { email, password } = req.body;
+
+    const admin = await Admin.findOne({ email: email });
+
     if (!admin)
       return res.status(401).json({
-        isSuccess: false,
-        status: 401,
+        Success: false,
         message: "Invalid Username!",
       });
 
-    // const validatePassword = await bcrypt.compare(
-    //   req.body.password,
-    //   admin.password
-    // );
-    console.log(admin.password);
-    if (admin.password != req.body.password) {
+    const validatePassword = await bcrypt.compare(password, admin.password);
+    
+    if (!validatePassword) {
       return res.status(401).json({
-        isSuccess: false,
-        status: 401,
+        Success: false,
         message: "Invalid Password!",
       });
     }
-    // const token = admin.generateAuthToken({ email: req.body.email });
-    // admin.remember_token = token;
 
-    // const refresh_token = admin.generateRefreshToken({ email: req.body.email });
-
-    // const output = await admin.save();
-    const tokens = {
-      token: "sdasfdsf",
-      refresh_token: "sdfsdf",
-      admin: admin,
+    const payload = {
+      email,
+      expiresIn: moment().add(10, "minutes").unix(),
     };
-    res.json({ isSuccess: true, status: 200, info: tokens });
+
+    let accessToken;
+    if (password && admin.password) {
+      accessToken = jwt.sign(payload, process.env.JWT_SECRECT_KEY);
+      admin.accessToken = accessToken;
+    }
+    const generateRefreshToken = (payload) => {
+      return jwt.sign(payload, process.env.JWT_REFRESH_SECRET_KEY);
+    };
+
+    const refreshToken = generateRefreshToken({ email: email });
+   admin.refreshToken = refreshToken;
+    const output = await admin.save();
+
+    res.status(200).json({
+      success: true,
+      admin: admin,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    });
   } catch (err) {
     next(err);
   }
 };
 
-// Assuming you have a function to compare passwords securely
-// async function comparePasswords(plainPassword, hashedPassword) {
-//   // Implement a secure method to compare passwords (e.g., using bcrypt)
-//   // For simplicity, I'm assuming a synchronous comparison here
-//   return plainPassword === hashedPassword;
-// }
-
-module.exports = { login };
+module.exports = { login, register };

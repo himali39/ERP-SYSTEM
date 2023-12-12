@@ -31,8 +31,7 @@ const Login = () => {
 
   /* ------------------------- onsubmit data function ------------------------- */
   const onSubmit = async (data) => {
-    // console.log(data, "data");
-    // await dispatch(resetLoginState);
+    await dispatch(resetLoginState);
     await dispatch(loginUser(data))
       .then((result) => {
         !result.error && navigate("/dashboard");
@@ -53,7 +52,6 @@ const Login = () => {
         m="2.5rem"
         width="fit-content"
       >
-        {error}
         <Box textAlign="center">
           <PersonOutlineIcon
             style={{
@@ -64,6 +62,11 @@ const Login = () => {
               backgroundColor: theme.palette.grey[600],
             }}
           />
+          {error && (
+            <Box role="alert" color="#ff5b00b0">
+              {error}
+            </Box>
+          )}
         </Box>
 
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -127,7 +130,6 @@ const Login = () => {
               >
                 {loading ? "Loading..." : "Login"}
               </Button>
-              {error && <Box role="alert">{error}</Box>}
             </Box>
           </Box>
         </form>

@@ -18,20 +18,28 @@ import AddDataForm from "./scenes/faculty/AddDataForm";
 import Register from "./scenes/login/Register";
 
 function App() {
-  // const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isAuthenticated = useSelector(
+    (state) => state.reducer.userReducer.isAuthenticated
+  );
 
   const mode = useSelector((state) => state.reducer.global.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
 
-  // const PublicRoute = ({ element }) => {
-  //   return isAuthenticated ? <Navigate to="/dashboard" replace /> : element;
-  // };
+  const PublicRoute = () => {
+    return isAuthenticated || Boolean(localStorage.getItem("accessToken")) ? (
+      <Navigate to="/dashboard" replace />
+    ) : (
+      <Login />
+    );
+  };
 
-  // const PrivateRoute = ({ element }) => {
-
-  //   console.log(isAuthenticated);
-  //   return isAuthenticated ? element : <Navigate to="/login" replace />;
-  // };
+  const PrivateRoute = ({}) => {
+    return isAuthenticated || Boolean(localStorage.getItem("accessToken")) ? (
+      <Layout />
+    ) : (
+      <Navigate to="/" />
+    );
+  };
 
   return (
     <div className="app">
@@ -39,11 +47,11 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
-            {/* <Route path="/" element={<PublicRoute element={<Layout />} />}> */}
-            <Route path="/" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            {/* </Route> */}
-            <Route element={<Layout />}>
+            <Route path="/" element={<PublicRoute />}>
+              <Route index element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Route>
+            <Route element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/faculty" element={<Faculty />} />
               <Route path="/admin" element={<Admin />} />

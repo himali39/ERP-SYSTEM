@@ -1,10 +1,12 @@
 // AuthContext.js
 import React, { createContext, useContext, useState } from "react";
+import { useDispatch } from "react-redux";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setLoggedIn] = useState(false);
+  const dispatch = useDispatch();
 
   const login = () => {
     // Perform login logic
@@ -14,6 +16,8 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     // Perform logout logic
     setLoggedIn(false);
+    // dispatch
+    alert("Sdfsdf");
   };
 
   return (
