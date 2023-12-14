@@ -5,17 +5,17 @@ import FlexBetween from "../../components/FlexBetween";
 import Header from "../../components/Header";
 import { useAddFacultyMutation } from "../../state/api";
 import { useNavigate } from "react-router-dom";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function AddDataForm() {
   const theme = useTheme();
   const { register, handleSubmit } = useForm();
   const [saveFormData] = useAddFacultyMutation();
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    /* ------------------------------ submited data ----------------------------- */
+  /* ------------------------------ submited data ----------------------------- */
   const onSubmit = (data) => {
-    
     /**Multipart formdata object*/
     let formData = new FormData();
 
@@ -25,9 +25,10 @@ function AddDataForm() {
       } else {
         formData.append(key, data[key]);
       }
+     
     });
 
-  /* ------------ Using FacultyMutation API through save form data ------------ */
+    /* ------------ Using FacultyMutation API through save form data ------------ */
     saveFormData(formData)
       .unwrap()
       .then((response) => {
@@ -36,9 +37,9 @@ function AddDataForm() {
       .catch((error) => {
         console.error("Mutation error:", error);
       });
-   
-/**Navigate faculty page*/
-   navigate("/faculty");
+ toast("Submitted successfully");
+    /**Navigate faculty page*/
+    navigate("/faculty");
   };
   return (
     <Box m="1.5rem 2.5rem">
@@ -107,6 +108,7 @@ function AddDataForm() {
               >
                 Submit
               </Button>
+              <ToastContainer />
               <Button
                 type="Reset"
                 variant="outlined"

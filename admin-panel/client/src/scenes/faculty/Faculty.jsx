@@ -15,6 +15,7 @@ import { PersonAddAlt1Outlined } from "@mui/icons-material";
 import FlexBetween from "../../components/FlexBetween";
 // import dotenv from "../../components/dotenv";
 import { useNavigate } from "react-router-dom";
+import MultipleSelectPlaceholder from "../../components/MultipleSelectPlaceholder";
 
 const Facultys = ({
   facultyImg,
@@ -121,10 +122,12 @@ const Faculty = () => {
               />
             )
           )}
+          
         </Box>
       ) : (
         <>Loading...</>
       )}
+   
     </Box>
   );
 };

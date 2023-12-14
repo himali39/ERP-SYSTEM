@@ -43,3 +43,8 @@ genarete refreshtoken in node Api Using Json web tokens
 I have work in admin login and log out functionality and i have worked manage 
 private Routes and public routes with Authenticated and token auth
 and refresh token auth 
+
+<!-- 14 Dec -->
+ I Have work in axios api get ,post,delete and put with using hooks like useLocation,useNavigation,
+ usestate,useForm and useEffect are implemented and so many libraries like sweetalert,toast are 
+ implemented, and learn mui meterial libraries and learn react js structure and so coding douts are solved
