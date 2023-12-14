@@ -17,8 +17,8 @@ import { ArrowDropDownOutlined, Search } from "@mui/icons-material";
 import profileImage from "../assets/profile.jpeg";
 import {signout} from "../state/index";
 
-const Navbar = ({ admin, isSidebarOpen, setIsSidebarOpen }) => {
-  console.log(admin)
+const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
+  console.log(user)
   const dispatch = useDispatch();
   const theme = useTheme();
 
