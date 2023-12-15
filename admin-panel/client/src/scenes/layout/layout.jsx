@@ -3,22 +3,19 @@ import React, { useState } from "react";
 import Navbar from "../../components/Navbar";
 import { Outlet } from "react-router-dom";
 import SideBar from "../../components/SideBar";
-import { useGetUserQuery } from "../../state/api";
-import { useSelector } from "react-redux";
+import { useAdminLoginQuery } from "../../state/api";
 
 function Layout() {
   const isNonMobile = useMediaQuery("(min-width: 600px)");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  // reduxjs-toolkit
-    const userId = useSelector((state) =>state.reducer.global.userId);
-  //api toolkit data
-  const { data } = useGetUserQuery(userId);
-  
 
+  // reduxjs-toolkit
+  const { data } = useAdminLoginQuery(localStorage.getItem("adminId"));
+  
   return (
     <Box display={isNonMobile ? "flex" : "block"} width="100%" height="100%">
       <SideBar
-        user={data || {}}
+        admin={data || {}}
         isNonMobile={isNonMobile}
         drawerWidth="250px"
         isSidebarOpen={isSidebarOpen}
@@ -26,7 +23,7 @@ function Layout() {
       />
       <Box flexGrow={1}>
         <Navbar
-          user={data || {}}
+          admin={data || {}}
           isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}
         />

@@ -17,12 +17,13 @@ import {
   ChevronLeft,
   ChevronRightOutlined,
   HomeOutlined,
-  ShoppingCartOutlined,
   Groups2Outlined,
-  CalendarMonthOutlined,
-  AdminPanelSettingsOutlined,
-  LoginOutlined,
-  SupervisorAccountOutlined,
+  PeopleAltOutlined,
+  PermIdentityOutlined,
+  EmojiEventsOutlined,
+  DateRangeOutlined,
+  BookOutlined,
+  HelpCenterOutlined,
 } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -35,53 +36,49 @@ const navItems = [
     icon: <HomeOutlined />,
   },
   {
-    text: "Client Facing",
+    text: "Manage",
     icon: null,
   },
   {
     text: "Faculty",
-    icon: <ShoppingCartOutlined />,
+    icon: <PeopleAltOutlined />,
   },
   {
-    text: "Customers",
+    text: "Student",
     icon: <Groups2Outlined />,
   },
   {
-    text: "Sales",
-    icon: null,
-  },
-  {
-    text: "Monthly",
-    icon: <CalendarMonthOutlined />,
+    text: "co-ordinator",
+    icon: <PermIdentityOutlined />,
   },
   {
     text: "Management",
     icon: null,
   },
   {
-    text: "Admin",
-    icon: <AdminPanelSettingsOutlined />,
+    text: "Awards",
+    icon: <EmojiEventsOutlined />,
   },
   {
-    text: "SuperAdmin",
-    icon: <SupervisorAccountOutlined />,
+    text: "Events",
+    icon: <DateRangeOutlined />,
   },
   {
     text: "Pages",
     icon: null,
   },
   {
-    text: "Login",
-    icon: <LoginOutlined />,
+    text: "Blogs",
+    icon: <BookOutlined />,
   },
   {
-    text: "Register",
-    icon: <LoginOutlined />,
+    text: "Help and support",
+    icon: <HelpCenterOutlined />,
   },
 ];
 
 const SideBar = ({
-  user,
+  admin,
   drawerWidth,
   isSidebarOpen,
   setIsSidebarOpen,
@@ -203,13 +200,13 @@ const SideBar = ({
                   fontSize="0.9rem"
                   sx={{ color: theme.palette.secondary[100] }}
                 >
-                  {user.name}
+                  {admin.name}
                 </Typography>
                 <Typography
                   fontSize="0.8rem"
                   sx={{ color: theme.palette.secondary[200] }}
                 >
-                  {user.occupation}
+                  {admin.occupation}
                 </Typography>
               </Box>
               <SettingsOutlined

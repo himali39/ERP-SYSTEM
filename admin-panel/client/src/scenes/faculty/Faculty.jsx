@@ -13,9 +13,7 @@ import Header from "../../components/Header";
 import { useGetFacultyQuery } from "../../state/api";
 import { PersonAddAlt1Outlined } from "@mui/icons-material";
 import FlexBetween from "../../components/FlexBetween";
-// import dotenv from "../../components/dotenv";
 import { useNavigate } from "react-router-dom";
-import MultipleSelectPlaceholder from "../../components/MultipleSelectPlaceholder";
 
 const Facultys = ({
   facultyImg,
@@ -53,8 +51,11 @@ const Facultys = ({
         <Typography variant="body2">{facultyAddress}</Typography>
       </CardContent>
       <CardActions>
-        <Button variant="primary" size="small">
-          See More
+        <Button variant="secondary" size="small">
+          Delete
+        </Button>
+        <Button variant="secondary" size="small">
+          Edit
         </Button>
       </CardActions>
     </Card>
@@ -122,12 +123,10 @@ const Faculty = () => {
               />
             )
           )}
-          
         </Box>
       ) : (
         <>Loading...</>
       )}
-   
     </Box>
   );
 };

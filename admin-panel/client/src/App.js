@@ -11,7 +11,6 @@ import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
 import { themeSettings } from "./theme"; // Make sure to import your theme settings
 import Layout from "./scenes/layout/layout";
 import Dashboard from "./scenes/dashboard/Dashboard";
-import Admin from "./scenes/admin/Admin";
 import Login from "./scenes/login/Login";
 import Faculty from "./scenes/faculty/Faculty";
 import AddDataForm from "./scenes/faculty/AddDataForm";
@@ -19,7 +18,7 @@ import Register from "./scenes/login/Register";
 
 function App() {
   const isAuthenticated = useSelector(
-    (state) => state.reducer.userReducer.isAuthenticated
+    (state) => state.reducer.adminReducer.isAuthenticated
   );
 
   const mode = useSelector((state) => state.reducer.global.mode);
@@ -54,33 +53,10 @@ function App() {
             <Route element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/faculty" element={<Faculty />} />
-              <Route path="/admin" element={<Admin />} />
               <Route path="/add-data-form" element={<AddDataForm />} />
             </Route>
           </Routes>
-          {/* <Routes>
-            <Route
-              path="/login"
-              element={<PublicRoute element={<Login />} />}
-            />
-            <Route
-              path="/dashboard"
-              element={<PrivateRoute element={<Dashboard />} />}
-            />
-            <Route
-              path="/faculty"
-              element={<PrivateRoute element={<Faculty />} />}
-            />
-            <Route
-              path="/admin"
-              element={<PrivateRoute element={<Admin />} />}
-            />
-            <Route
-              path="/add-data-form"
-              element={<PrivateRoute element={<AddDataForm />} />}
-            />
-          </Routes> */}
-        </ThemeProvider>
+                  </ThemeProvider>
       </BrowserRouter>
     </div>
   );

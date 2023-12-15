@@ -8,6 +8,7 @@ import StatBox from "../../components/StatBox";
 import { Email, PersonAdd, PointOfSale, Traffic } from "@mui/icons-material";
 
 const Dashboard = () => {
+ 
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const { data, isLoading } = useGetDashboardQuery();

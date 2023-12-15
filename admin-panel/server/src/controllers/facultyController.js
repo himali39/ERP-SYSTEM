@@ -7,9 +7,10 @@ const createFaculty = async (req, res) => {
     /** file upload*/
     if (req.file) {
       reqbody.facultyImg = req.file.filename;
-    } else {
-      throw new Error("faculty Img is required!");
-    }
+    } 
+    // else {
+    //   throw new Error("faculty Img is required!");
+    // }
 
     const faculty = await Faculty.create(reqbody);
     if (!faculty) {
@@ -24,7 +25,7 @@ const createFaculty = async (req, res) => {
   }
 };
 
-/**Get user data */
+/**Get faculty data */
 const getfaculty = async (req, res) => {
   try {
     // const { id } = req.params;
@@ -39,4 +40,21 @@ const getfaculty = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
-module.exports = { getfaculty, createFaculty };
+
+/**delete faculty data */
+const deleteFaculty = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const faculty = await Faculty.findById(id);
+
+    if (!faculty) {
+      return res.status(404).json({ message: "Faculty not found" });
+    }
+    const deleteData=await Faculty.findByIdAndDelete(id);
+    res.status(200).json(deleteData);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+module.exports = { getfaculty, createFaculty, deleteFaculty };

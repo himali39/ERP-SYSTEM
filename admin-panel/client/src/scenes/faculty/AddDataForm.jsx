@@ -10,12 +10,18 @@ import "react-toastify/dist/ReactToastify.css";
 
 function AddDataForm() {
   const theme = useTheme();
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [saveFormData] = useAddFacultyMutation();
   const navigate = useNavigate();
 
   /* ------------------------------ submited data ----------------------------- */
   const onSubmit = (data) => {
+    console.log("🚀  ~ onSubmit ~ data:", data)
+    
     /**Multipart formdata object*/
     let formData = new FormData();
 
@@ -25,7 +31,6 @@ function AddDataForm() {
       } else {
         formData.append(key, data[key]);
       }
-     
     });
 
     /* ------------ Using FacultyMutation API through save form data ------------ */
@@ -35,14 +40,17 @@ function AddDataForm() {
         console.log("Mutation response:", response);
       })
       .catch((error) => {
-        console.error("Mutation error:", error);
+        console.log("Mutation error:", error);
       });
- toast("Submitted successfully");
+    console.log("formData", formData);
+
     /**Navigate faculty page*/
-    navigate("/faculty");
+    // navigate("/faculty");
   };
+
   return (
     <Box m="1.5rem 2.5rem">
+      <ToastContainer />
       <FlexBetween>
         <Header title="FACULTY" subtitle="Add new Faculty Data." />
       </FlexBetween>
@@ -61,10 +69,28 @@ function AddDataForm() {
               id="outlined-basic"
               variant="outlined"
               accept="image/*"
-              {...register("facultyImg")}
+              error={!!errors["facultyImg"]}
+              helperText={errors.image?.message}
               name="facultyImg"
-              // onChange={handleImageChange}
+              {...register("facultyImg" 
+              //  { required: "Please enter your faculty Image ",
+              // }
+              )}
             />
+
+            {errors.facultyImg ? (
+              <img
+                src={"/assets/profile.jpeg"}
+                alt="No Profile"
+                style={{ height: "50px", width: "50px", borderRadius: "50%" }}
+              />
+            ) : (
+              <img
+                src={"/assets/profile.jpeg"} // Make sure to use the correct path for the selected image
+                alt="Selected Profile"
+                style={{ height: "50px", width: "50px", borderRadius: "50%" }}
+              />
+            )}
 
             <TextField
               fullWidth
@@ -72,8 +98,12 @@ function AddDataForm() {
               label="Full Name"
               variant="outlined"
               style={{ marginTop: "20px" }}
-              {...register("facultyName")}
+              error={!!errors["facultyName"]}
+              helperText={errors.facultyName?.message}
               name="facultyName"
+              {...register("facultyName", {
+                required: "Please enter your faculty Name.",
+              })}
             />
 
             <TextField
@@ -82,8 +112,12 @@ function AddDataForm() {
               id="outlined-basic"
               label="Subject"
               variant="outlined"
-              {...register("facultySubject")}
               name="facultySubject"
+              error={!!errors["facultySubject"]}
+              helperText={errors.facultySubject?.message}
+              {...register("facultySubject", {
+                required: "Please enter your Faculty Subject .",
+              })}
             />
 
             <TextField
@@ -92,8 +126,12 @@ function AddDataForm() {
               id="outlined-basic"
               label="Resident Address"
               variant="outlined"
-              {...register("facultyAddress")}
               name="facultyAddress"
+              error={!!errors["facultyAddress"]}
+              helperText={errors.facultyAddress?.message}
+              {...register("facultyAddress", {
+                required: "Please enter your Faculty Address .",
+              })}
             />
 
             <Box marginTop="1.3rem">
@@ -108,7 +146,7 @@ function AddDataForm() {
               >
                 Submit
               </Button>
-              <ToastContainer />
+
               <Button
                 type="Reset"
                 variant="outlined"

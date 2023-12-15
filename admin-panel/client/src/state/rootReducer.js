@@ -1,8 +1,8 @@
 const { combineReducers } = require("@reduxjs/toolkit");
-const { userReducer, globalReducer } = require("../state/index");
+const { adminReducer, globalReducer } = require("../state/index");
 
 const rootReducer = combineReducers({
-  userReducer: userReducer,
+  adminReducer: adminReducer,
   global: globalReducer,
 });
 export default rootReducer;

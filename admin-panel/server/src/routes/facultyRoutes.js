@@ -2,6 +2,7 @@ const express = require("express");
 const {
   getfaculty,
   createFaculty,
+  deleteFaculty,
 } = require("../controllers/facultyController");
 const { upload } = require("../middlwares/upload");
 
@@ -12,5 +13,8 @@ router.post("/addfaculty", upload.single("facultyImg"), createFaculty);
 
 /**Get faculty data list */
 router.get("/facultyList", getfaculty);
+
+/** faculty data delete */
+router.delete("/deletefaculty/:id", deleteFaculty);
 
 module.exports = router;

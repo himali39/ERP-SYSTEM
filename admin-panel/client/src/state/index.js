@@ -3,7 +3,7 @@ import axios from "axios";
 
 const initialState = {
   mode: "dark",
-  userId: "63701cc1f03239c72c000180",
+  //  userId: "657be0fa1548bc5db89e9297",
 };
 /**set color theme mode reducer */
 const globalSlice = createSlice({
@@ -16,8 +16,8 @@ const globalSlice = createSlice({
   },
 });
 
-export const loginUser = createAsyncThunk(
-  "loginUser",
+export const loginAdmin = createAsyncThunk(
+  "loginAdmin",
   async (credentials, { rejectWithValue }) => {
     try {
       const response = await axios.post(
@@ -35,7 +35,7 @@ export const loginUser = createAsyncThunk(
       if (contentType && contentType.includes("application/json")) {
         return response.data;
       } else {
-                return response.data;
+        return response.data;
       }
     } catch (error) {
       return rejectWithValue(error.response.data.message);
@@ -48,8 +48,7 @@ const apiSlice = createSlice({
   initialState: {
     loading: false,
     error: null,
-    isAuthenticated: false,
-    user: null,
+    isAuthenticated: Boolean(localStorage.getItem("accessToken")),
   },
   reducers: {
     resetLoginState: (state) => {
@@ -57,24 +56,26 @@ const apiSlice = createSlice({
       state.error = null;
     },
     signout: (state) => {
-      console.log(state.isAuthenticated);
-       state.isAuthenticated = false;
-
-    }
+      state.isAuthenticated = false;
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("adminId");
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginUser.pending, (state) => {
+      .addCase(loginAdmin.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
+      .addCase(loginAdmin.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuthenticated = true;
         localStorage.setItem("accessToken", action.payload.accessToken);
         localStorage.setItem("refreshToken", action.payload.refreshToken);
+        localStorage.setItem("adminId", action.payload.admin._id);
       })
-      .addCase(loginUser.rejected, (state, action) => {
+      .addCase(loginAdmin.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
@@ -82,12 +83,7 @@ const apiSlice = createSlice({
 });
 
 export const { resetLoginState, signout } = apiSlice.actions;
-
-
-export const userReducer = apiSlice.reducer;
-
-
+export const adminReducer = apiSlice.reducer;
 
 export const { setMode } = globalSlice.actions;
-
 export const globalReducer = globalSlice.reducer;

@@ -6,9 +6,13 @@ export const api = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_BASE_URL }),
 
   reducerPath: "adminApi",
-  tagTypes: ["User", "Dashboard", "Faculty", "data"],
+  tagTypes: ["admin", "Dashboard", "Faculty", "data"],
 
   endpoints: (builder) => ({
+    adminLogin: builder.query({
+      query: (id) => `/auth/getadmin/${id}`,
+      providesTags: ["admin"],
+    }),
     getUser: builder.query({
       query: (id) => `/general/user/${id}`, //getuser from controller
       providesTags: ["User"],
@@ -29,11 +33,11 @@ export const api = createApi({
         body: data,
       }),
     }),
-
   }),
 });
 
 export const {
+  useAdminLoginQuery,
   useGetUserQuery,
   useGetDashboardQuery,
   useGetFacultyQuery,

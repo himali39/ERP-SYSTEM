@@ -104,4 +104,19 @@ const login = async (req, res, next) => {
   }
 };
 
-module.exports = { login, register };
+/**Get admin data */
+const getadmin = async (req, res) => {
+  try {
+    const  id  = req.params;
+
+    const admin = await Admin.findById(id);
+
+    if (!admin) {
+      return res.status(404).json({ message: "Admin data not found" });
+    }
+    res.status(200).json(admin);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+module.exports = { login, register,getadmin };

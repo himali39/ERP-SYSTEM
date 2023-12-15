@@ -11,27 +11,27 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FlexBetween from "./FlexBetween";
 import { ArrowDropDownOutlined, Search } from "@mui/icons-material";
 import profileImage from "../assets/profile.jpeg";
-import {signout} from "../state/index";
+import { signout } from "../state/index";
 
-const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
-  console.log(user)
+
+const Navbar = ({ admin, isSidebarOpen, setIsSidebarOpen }) => {
   const dispatch = useDispatch();
   const theme = useTheme();
-
   const [anchorEl, setAnchorEl] = useState(null);
   const isOpen = Boolean(anchorEl);
+
   const handleClick = (event) => setAnchorEl(event.currentTarget);
 
   const handleClose = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     dispatch(signout());
-    // setAnchorEl(null);
-  }
+    
+  };
   return (
     <AppBar
       sx={{
@@ -81,13 +81,13 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
                 fontSize="0.85rem"
                 sx={{ color: theme.palette.secondary[100] }}
               >
-                {user.name}
+                {admin.name}
               </Typography>
               <Typography
                 fontSize="0.75rem"
                 sx={{ color: theme.palette.secondary[200] }}
               >
-                {user.occupation}
+                {admin.role}
               </Typography>
             </Box>
             <ArrowDropDownOutlined
@@ -100,7 +100,7 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
             onClose={handleClose}
             anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
           >
-            <MenuItem onClick={()=>handleClose()}>Log Out</MenuItem>
+            <MenuItem onClick={handleClose}>Log Out</MenuItem>
           </Menu>
         </FlexBetween>
       </Toolbar>

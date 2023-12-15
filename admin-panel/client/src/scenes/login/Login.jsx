@@ -15,7 +15,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { resetLoginState, loginUser } from "../../state";
+import { resetLoginState, loginAdmin } from "../../state";
 
 const Login = () => {
   const theme = useTheme();
@@ -27,16 +27,17 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useSelector((state) => state.reducer.userReducer);
+  const { loading, error } = useSelector((state) => state.reducer.adminReducer);
 
   /* ------------------------- onsubmit data function ------------------------- */
   const onSubmit = async (data) => {
     await dispatch(resetLoginState);
-    await dispatch(loginUser(data))
+    await dispatch(loginAdmin(data))
       .then((result) => {
         !result.error && navigate("/dashboard");
       })
       .catch((error) => console.log(error.message));
+     
   };
 
   const handleTogglePassword = () => {
