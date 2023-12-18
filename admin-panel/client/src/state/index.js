@@ -3,7 +3,6 @@ import axios from "axios";
 
 const initialState = {
   mode: "dark",
-  //  userId: "657be0fa1548bc5db89e9297",
 };
 /**set color theme mode reducer */
 const globalSlice = createSlice({

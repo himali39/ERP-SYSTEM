@@ -4,6 +4,7 @@ const FacultySchema = new mongoose.Schema(
   {
     facultyImg: {
       type: String,
+      default: null,
     },
     facultyName: {
       type: String,
@@ -33,7 +34,6 @@ const FacultySchema = new mongoose.Schema(
     // },
   }
 );
-
 
 const Faculty = mongoose.model("Faculty", FacultySchema);
 

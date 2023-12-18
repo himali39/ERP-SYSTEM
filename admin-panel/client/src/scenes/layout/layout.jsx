@@ -11,7 +11,7 @@ function Layout() {
 
   // reduxjs-toolkit
   const { data } = useAdminLoginQuery(localStorage.getItem("adminId"));
-  
+    
   return (
     <Box display={isNonMobile ? "flex" : "block"} width="100%" height="100%">
       <SideBar

@@ -33,6 +33,19 @@ export const api = createApi({
         body: data,
       }),
     }),
+    // deleteFaculty: builder.query({
+    //   query: (id) => `faculty/deletefaculty/${id}`,
+    //   method: "DELETE",
+    //   providesTags: ["admin"],
+    // }),
+    deleteFaculty: builder.mutation({
+      query: (id) => ({
+        url: `faculty/deletefaculty/${id}`,
+        method: "DELETE",
+        // body: id,
+      }),
+      invalidateTags: ["Faculty"],
+    }),
   }),
 });
 
@@ -41,5 +54,6 @@ export const {
   useGetUserQuery,
   useGetDashboardQuery,
   useGetFacultyQuery,
-  useAddFacultyMutation
+  useAddFacultyMutation,
+  useDeleteFacultyMutation,
 } = api;

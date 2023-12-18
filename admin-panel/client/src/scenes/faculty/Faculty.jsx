@@ -10,34 +10,63 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import Header from "../../components/Header";
-import { useGetFacultyQuery } from "../../state/api";
+import { useDeleteFacultyMutation, useGetFacultyQuery } from "../../state/api";
 import { PersonAddAlt1Outlined } from "@mui/icons-material";
 import FlexBetween from "../../components/FlexBetween";
 import { useNavigate } from "react-router-dom";
+import no_profile from "../../assets/images/no-image.jpeg";
+import { useDispatch } from "react-redux";
 
 const Facultys = ({
+  id,
   facultyImg,
   facultyName,
   facultyAddress,
   facultySubject,
+  // handleDelete,
 }) => {
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const { mutate: delete_mutate } = useDeleteFacultyMutation(id);
+  // const { data } = useDeleteFacultyQuery(id);
 
+  const handleDelete = async () => {
+    delete_mutate();
+    // try {
+    //   await deleteFacultyMutation.mutate({ id: id });
+    //   console.log("🚀 ~ file:  deleteFacultyMutation:", deleteFacultyMutation);
+    //   console.log(id);
+    //   // Optionally, you can dispatch a Redux action to update your state
+    // } catch (error) {
+    //   console.error("Error deleting faculty:", error);
+    // }
+  };
   return (
     <Card
       sx={{
         backgroundColor: theme.palette.background.alt,
         borderRadius: "0.55rem",
+        "&:hover": {
+          // borderColor: theme.vars.palette.primary.outlinedHoverBorder,
+          transform: "translateY(-5px)",
+        },
       }}
     >
       <CardContent>
         <Typography>
-          <img
-            width="100%"
-            height="220px"
-            src={`${process.env.REACT_APP_BASE_URL_FACULTY}${facultyImg}`}
-            alt={facultyName}
-          />
+          {facultyImg ? (
+            <img
+              style={{ height: "220px", width: "100%" }}
+              src={`${process.env.REACT_APP_BASE_URL_FACULTY}${facultyImg}`}
+              alt={facultyName}
+            />
+          ) : (
+            <img
+              src={no_profile}
+              alt="No Profile"
+              style={{ height: "220px", width: "100%" }}
+            />
+          )}
         </Typography>
 
         <Typography variant="h5" component="div">
@@ -51,7 +80,7 @@ const Facultys = ({
         <Typography variant="body2">{facultyAddress}</Typography>
       </CardContent>
       <CardActions>
-        <Button variant="secondary" size="small">
+        <Button variant="secondary" size="small" onClick={handleDelete}>
           Delete
         </Button>
         <Button variant="secondary" size="small">
@@ -76,19 +105,31 @@ const Faculty = () => {
     <Box m="1.5rem 2.5rem">
       <FlexBetween>
         <Header title="FACULTY" subtitle="See list of Faculty." />
-        <Box>
+        <Box sx={{ mr: "10px" }}>
           <Button
             sx={{
               backgroundColor: theme.palette.secondary.light,
               color: theme.palette.background.alt,
-              fontSize: "14px",
+              fontSize: "16px",
               fontWeight: "bold",
-              padding: "1px 20px",
+              padding: "6px 20px",
             }}
             onClick={handleButtonClick}
           >
             <PersonAddAlt1Outlined sx={{ mr: "10px" }} />
             AddData
+          </Button>
+          <Button
+            sx={{
+              backgroundColor: theme.palette.secondary.light,
+              color: theme.palette.background.alt,
+              fontSize: "16px",
+              fontWeight: "bold",
+              padding: "6px 20px",
+            }}
+          >
+            <PersonAddAlt1Outlined sx={{ mr: "10px" }} />
+            File Upload
           </Button>
         </Box>
       </FlexBetween>
@@ -108,18 +149,22 @@ const Faculty = () => {
         >
           {data?.map(
             ({
+              Ind,
               facultyImg,
               facultyName,
               facultyAddress,
               facultySubject,
+              handleDelete,
               id,
             }) => (
               <Facultys
-                key={facultyName}
+                key={Ind}
+                id={id}
                 facultyImg={facultyImg}
                 facultyName={facultyName}
                 facultyAddress={facultyAddress}
                 facultySubject={facultySubject}
+                handleDelete={handleDelete}
               />
             )
           )}

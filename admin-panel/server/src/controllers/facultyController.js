@@ -5,9 +5,10 @@ const createFaculty = async (req, res) => {
     const reqbody = req.body;
 
     /** file upload*/
-    if (req.file) {
+    reqbody.facultyImg = "";
+    if (req.file && req.file != "undefined") {
       reqbody.facultyImg = req.file.filename;
-    } 
+    }
     // else {
     //   throw new Error("faculty Img is required!");
     // }
@@ -49,12 +50,18 @@ const deleteFaculty = async (req, res) => {
     const faculty = await Faculty.findById(id);
 
     if (!faculty) {
-      return res.status(404).json({ message: "Faculty not found" });
+      return res.status(404).json({ message: "Faculty Id already Deleted" });
     }
-    const deleteData=await Faculty.findByIdAndDelete(id);
-    res.status(200).json(deleteData);
+    const deleteData = await Faculty.findByIdAndDelete(id);
+
+    res.status(200).json({
+      success: true,
+      message: "Faculty deleted successfully",
+      // deletedData: deleteData,
+    });
+    
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(404).json({ success: false, message: error.message });
   }
 };
 module.exports = { getfaculty, createFaculty, deleteFaculty };

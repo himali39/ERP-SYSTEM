@@ -67,7 +67,7 @@ const login = async (req, res, next) => {
       });
 
     const validatePassword = await bcrypt.compare(password, admin.password);
-    
+
     if (!validatePassword) {
       return res.status(401).json({
         Success: false,
@@ -90,7 +90,7 @@ const login = async (req, res, next) => {
     };
 
     const refreshToken = generateRefreshToken({ email: email });
-   admin.refreshToken = refreshToken;
+    admin.refreshToken = refreshToken;
     const output = await admin.save();
 
     res.status(200).json({
@@ -107,9 +107,8 @@ const login = async (req, res, next) => {
 /**Get admin data */
 const getadmin = async (req, res) => {
   try {
-    const  id  = req.params;
-
-    const admin = await Admin.findById(id);
+    
+    const admin = await Admin.findById(req.params.id);
 
     if (!admin) {
       return res.status(404).json({ message: "Admin data not found" });
@@ -119,4 +118,4 @@ const getadmin = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
-module.exports = { login, register,getadmin };
+module.exports = { login, register, getadmin };

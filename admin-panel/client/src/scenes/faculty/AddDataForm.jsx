@@ -20,8 +20,7 @@ function AddDataForm() {
 
   /* ------------------------------ submited data ----------------------------- */
   const onSubmit = (data) => {
-    console.log("🚀  ~ onSubmit ~ data:", data)
-    
+        
     /**Multipart formdata object*/
     let formData = new FormData();
 
@@ -72,25 +71,8 @@ function AddDataForm() {
               error={!!errors["facultyImg"]}
               helperText={errors.image?.message}
               name="facultyImg"
-              {...register("facultyImg" 
-              //  { required: "Please enter your faculty Image ",
-              // }
-              )}
+              {...register("facultyImg")}
             />
-
-            {errors.facultyImg ? (
-              <img
-                src={"/assets/profile.jpeg"}
-                alt="No Profile"
-                style={{ height: "50px", width: "50px", borderRadius: "50%" }}
-              />
-            ) : (
-              <img
-                src={"/assets/profile.jpeg"} // Make sure to use the correct path for the selected image
-                alt="Selected Profile"
-                style={{ height: "50px", width: "50px", borderRadius: "50%" }}
-              />
-            )}
 
             <TextField
               fullWidth

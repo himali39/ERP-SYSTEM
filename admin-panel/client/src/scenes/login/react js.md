@@ -48,3 +48,8 @@ and refresh token auth
  I Have work in axios api get ,post,delete and put with using hooks like useLocation,useNavigation,
  usestate,useForm and useEffect are implemented and so many libraries like sweetalert,toast are 
  implemented, and learn mui meterial libraries and learn react js structure and so coding douts are solved
+
+<!-- 18 Dec -->
+i have work is set defualt images in a use form and make delete api  in backend side and react toolkit query 
+through ingrediention trying but many time showing error in api mutation mutate function ,so number of time
+solves the problem but not a find  proper solution today,tommorrow continue for this error
