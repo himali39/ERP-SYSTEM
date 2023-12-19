@@ -5,7 +5,7 @@ import FlexBetween from "../../components/FlexBetween";
 import Header from "../../components/Header";
 import { useAddFacultyMutation } from "../../state/api";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function AddDataForm() {
@@ -44,7 +44,7 @@ function AddDataForm() {
     console.log("formData", formData);
 
     /**Navigate faculty page*/
-    // navigate("/faculty");
+    navigate("/faculty");
   };
 
   return (

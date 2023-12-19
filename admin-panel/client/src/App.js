@@ -15,6 +15,8 @@ import Login from "./scenes/login/Login";
 import Faculty from "./scenes/faculty/Faculty";
 import AddDataForm from "./scenes/faculty/AddDataForm";
 import Register from "./scenes/login/Register";
+import Events from "./scenes/events/Events";
+import Student from "./scenes/student/Student";
 
 function App() {
   const isAuthenticated = useSelector(
@@ -54,9 +56,11 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/faculty" element={<Faculty />} />
               <Route path="/add-data-form" element={<AddDataForm />} />
+              <Route path="/events" element={<Events />} />
+              <Route path="/student" element={<Student />} />
             </Route>
           </Routes>
-                  </ThemeProvider>
+        </ThemeProvider>
       </BrowserRouter>
     </div>
   );
