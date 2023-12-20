@@ -8,17 +8,17 @@ const FacultySchema = new mongoose.Schema(
     },
     facultyName: {
       type: String,
-      required: true,
+      // required: true,
       min: 2,
       max: 100,
     },
     facultySubject: {
       type: String,
-      required: true,
+      // required: true,
     },
     facultyAddress: {
       type: String,
-      required: true,
+      // required: true,
       min: 2,
       max: 100,
     },

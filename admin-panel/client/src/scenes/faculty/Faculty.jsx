@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useEffect, useState } from "react";
 import {
   useDeleteFacultyMutation,
   useDeleteFacultyQuery,
@@ -17,35 +17,54 @@ import { useTheme } from "@emotion/react";
 import FlexBetween from "../../components/FlexBetween";
 import Header from "../../components/Header";
 import { FileUploadOutlined, PersonAddAlt1Outlined } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import no_profile from "../../assets/images/no-image.jpeg";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const Faculty = () => {
+const Faculty = (data) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const isNonMobile = useMediaQuery("(min-width: 1000px)");
-  const { data, isLoading } = useGetFacultyQuery();
-  // const {deleteData} = useDeleteFacultyQuery();
+  // const { isLoading } = useGetFacultyQuery();
+  const [formData, setFormData] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
-  const handleAddDataClick = () => {
-    navigate("/add-data-form");
+  /**Multipart formdata object*/
+  let formdata = new FormData();
+
+  Object.keys(data).forEach(function (key) {
+    if (key === "facultyImg") {
+      formdata.append(key, data[key][0]);
+    } else {
+      formdata.append(key, data[key]);
+    }
+  });
+
+  
+   const getdata = () => {
+    axios
+      .get(`${process.env.REACT_APP_BASE_URL}faculty/facultyList`)
+      .then((res) => {
+        setFormData(res.data || []);
+      });
   };
-
-  const handleUploadDataClick = () => {
-    // navigate("/add-data-form");
-  };
-
   const handleDelete = async (id) => {
-    console.log(id);
-
-    axios.delete(`faculty/deletefaculty/${id}`).then(() => {
-      // data.filter((e) => e.id !== id))
-    });
+    axios.delete(
+      `${process.env.REACT_APP_BASE_URL}faculty/deletefaculty/${id}`
+    );
+    // toast("Delete successfully");
+    window.location.reload();
   };
 
+  useEffect(() => {
+    getdata();
+    setLoading(false);
+  }, []);
   return (
     <>
+      <ToastContainer />
       <Box m="1.5rem 2.5rem">
         <FlexBetween>
           <Header title="FACULTY" subtitle="See list of Faculty." />
@@ -60,7 +79,7 @@ const Faculty = () => {
                 width: "100%",
                 height: "80%",
               }}
-              onClick={handleAddDataClick}
+              onClick={()=> navigate("/add-data-form")}
             >
               <PersonAddAlt1Outlined sx={{ mr: "10px" }} />
               Add Faculty
@@ -74,7 +93,7 @@ const Faculty = () => {
                 width: "100%",
                 height: "80%",
               }}
-              onClick={handleUploadDataClick}
+              // onClick={handleUploadDataClick}
             >
               <FileUploadOutlined sx={{ mr: "10px" }} />
               File Upload
@@ -82,7 +101,7 @@ const Faculty = () => {
           </Box>
         </FlexBetween>
 
-        {data || !isLoading ? (
+        {formData || !isLoading ? (
           <Box
             mt="20px"
             display="grid"
@@ -95,7 +114,7 @@ const Faculty = () => {
               "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
             }}
           >
-            {data?.map((val, ind) => {
+            {formData?.map((val, ind) => {
               return (
                 <Card
                   key={ind}
@@ -103,7 +122,6 @@ const Faculty = () => {
                     backgroundColor: theme.palette.background.alt,
                     borderRadius: "0.55rem",
                     "&:hover": {
-                      // borderColor: theme.vars.palette.primary.outlinedHoverBorder,
                       transform: "translateY(-5px)",
                     },
                   }}
@@ -144,11 +162,17 @@ const Faculty = () => {
                     <Button
                       variant="secondary"
                       size="small"
-                      onClick={() => handleDelete(val.id)}
+                      onClick={() => handleDelete(val._id)}
                     >
                       Delete
                     </Button>
-                    <Button variant="secondary" size="small">
+                    <Button
+                      variant="secondary"
+                      size="small"
+                      onClick={() =>
+                         navigate("/add-data-form", { state: { userData: val } })
+                      }
+                    >
                       Edit
                     </Button>
                   </CardActions>
