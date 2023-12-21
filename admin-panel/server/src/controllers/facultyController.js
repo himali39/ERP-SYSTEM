@@ -1,5 +1,7 @@
 const Faculty = require("../models/facultyModel");
-const csv=require("csvtojson");
+const csv = require("csvtojson");
+
+/* --------------------------- create faculty data -------------------------- */
 const createFaculty = async (req, res) => {
   try {
     const reqbody = req.body;
@@ -26,7 +28,7 @@ const createFaculty = async (req, res) => {
   }
 };
 
-/**Get faculty data */
+/* ---------------------------- Get faculty data ---------------------------- */
 const getfaculty = async (req, res) => {
   try {
     // const { id } = req.params;
@@ -42,7 +44,7 @@ const getfaculty = async (req, res) => {
   }
 };
 
-/**delete faculty data */
+/* --------------------------- delete faculty data -------------------------- */
 const deleteFaculty = async (req, res) => {
   try {
     const { id } = req.params;
@@ -64,10 +66,9 @@ const deleteFaculty = async (req, res) => {
   }
 };
 
-/**delete faculty data */
+/* --------------------------- Update faculty data -------------------------- */
 const updateFaculty = async (req, res) => {
   try {
-  
     const id = req.params.id;
 
     const faculty = await Faculty.findById(id);
@@ -83,8 +84,8 @@ const updateFaculty = async (req, res) => {
       new: true,
     });
 
-    console.log("req.body--------------",req.body);
-    
+    console.log("req.body--------------", req.body);
+
     if (!updateFacultyData) {
       throw new Error("Something went wrong, try again later  ");
     }
@@ -99,28 +100,24 @@ const updateFaculty = async (req, res) => {
   }
 };
 
-/**Update faculty data */
-const updateUser = async (req, res) => {
+/* ----------------------------- csv file upload ---------------------------- */
+const importFaculty = (req, res) => {
   try {
-    const userId = req.params.userId;
-    console.log("🚀  userId:", req.params.userId);
+    let faculty=[];
 
-    const UserExi = await Faculty.findById(userId);
-    
-       if (!UserExi) {
-      throw new Error("User data not found");
-    }
-    const updatedata= await Faculty.findByIdAndUpdate(userId, req.body, { new: true });
+    csv().fromFile(req.file.path).then((res)=>{
+      // console.log(res);
+      for(let x=0; x<res.length; x++) {
+        faculty.push({
 
-    console.log("🚀 ~~ req.body:", req.body)
-
-    console.log("🚀 ~ updatedata:", updatedata);
+        })
+      }
+    })
 
     res.status(200).json({
       success: true,
-      message: "User details Update succesfully!",
-      });
-
+      message: "file uploaded successfully",
+    });
   } catch (error) {
     res.status(400).json({
       success: false,
@@ -129,30 +126,10 @@ const updateUser = async (req, res) => {
   }
 };
 
-/**csv file upload */
-const importFaculty=(req,res)=>{
-try{
-//  if (req.file ) {
-//    reqbody.file = req.file.filename;
-//  }
- res.status(200).json({
-   success: true,
-   message: "file uploaded successfully",
- });
-}catch (error) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
-}
-}
-
-
 module.exports = {
   getfaculty,
   createFaculty,
   deleteFaculty,
   updateFaculty,
-  updateUser,
   importFaculty,
 };
