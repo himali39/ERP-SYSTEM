@@ -31,19 +31,7 @@ const Faculty = (data) => {
   const [formData, setFormData] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
-  /**Multipart formdata object*/
-  let formdata = new FormData();
-
-  Object.keys(data).forEach(function (key) {
-    if (key === "facultyImg") {
-      formdata.append(key, data[key][0]);
-    } else {
-      formdata.append(key, data[key]);
-    }
-  });
-
-  
-   const getdata = () => {
+  const getdata = () => {
     axios
       .get(`${process.env.REACT_APP_BASE_URL}faculty/facultyList`)
       .then((res) => {
@@ -51,17 +39,18 @@ const Faculty = (data) => {
       });
   };
   const handleDelete = async (id) => {
-    axios.delete(
-      `${process.env.REACT_APP_BASE_URL}faculty/deletefaculty/${id}`
-    );
-    // toast("Delete successfully");
-    window.location.reload();
+    axios
+      .delete(`${process.env.REACT_APP_BASE_URL}faculty/deletefaculty/${id}`)
+      .then(() => {
+        setFormData(formData.filter((e) => e.id !== id));
+      });
   };
 
   useEffect(() => {
     getdata();
-    setLoading(false);
+    // setLoading(false);
   }, []);
+
   return (
     <>
       <ToastContainer />
@@ -79,7 +68,7 @@ const Faculty = (data) => {
                 width: "100%",
                 height: "80%",
               }}
-              onClick={()=> navigate("/add-data-form")}
+              onClick={() => navigate("/add-data-form")}
             >
               <PersonAddAlt1Outlined sx={{ mr: "10px" }} />
               Add Faculty
@@ -130,9 +119,10 @@ const Faculty = (data) => {
                     <Typography>
                       {val.facultyImg ? (
                         <img
-                          style={{ height: "220px", width: "100%" }}
-                          src={`${process.env.REACT_APP_BASE_URL_FACULTY}${val.facultyImg}`}
+                          // src={`${process.env.REACT_APP_BASE_URL_FACULTY}${val.facultyImg}`}
+                          src={`http://localhost:5000/faculty_images/${val.facultyImg}`}
                           alt={val.facultyName}
+                          style={{ height: "220px", width: "100%" }}
                         />
                       ) : (
                         <img
@@ -142,18 +132,15 @@ const Faculty = (data) => {
                         />
                       )}
                     </Typography>
-
                     <Typography variant="h5" component="div">
                       {val.facultyName}
                     </Typography>
-
                     <Typography
                       sx={{ fontSize: 14 }}
                       color={theme.palette.secondary[700]}
                     >
                       {val.facultySubject}
                     </Typography>
-
                     <Typography variant="body2">
                       {val.facultyAddress}
                     </Typography>
@@ -169,11 +156,14 @@ const Faculty = (data) => {
                     <Button
                       variant="secondary"
                       size="small"
-                      onClick={() =>
-                         navigate("/add-data-form", { state: { userData: val } })
-                      }
+                      onClick={() => {
+                        navigate("/add-data-form", {
+                          state: { userData: val },
+                        });
+                      }}
                     >
-                      Edit
+                      {/* navigate("/add-data-form", { state: { userData :val} }) */}
+                      Update
                     </Button>
                   </CardActions>
                 </Card>

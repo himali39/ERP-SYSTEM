@@ -5,19 +5,21 @@ const path = require("path");
 /** Image upload using disk storage */
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    if (file.fieldname == "facultyImg") {
-      fs.mkdirSync(path.join(__dirname, "../public/faculty_images"), {
-        recursive: true,
-      });
-      cb(null, path.join(__dirname, "../public/faculty_images"));
-    }
+    cb(null,path.join(__dirname, "../public/faculty_images"))
+    // if (file.fieldname == "facultyImg") {
+    //   fs.mkdirSync(path.join(__dirname, "../public/faculty_images"), {
+    //     recursive: true,
+    //   });
+    //   cb(null, path.join(__dirname, "../public/faculty_images"));
+    // }
   },
   filename: function (req, file, cb) {
-    const ext = path.extname(file.originalname);
-    if (ext !== ".png" && ext !== ".jpg" && ext !== ".jpeg" && ext !== ".webp") {
-      cb("Only .png, .jpg, .jpeg and .webp format are allowed!");
-    }
-    cb(null, new Date().getTime() + ext);
+    cb(null,file.originalname)
+  //   const ext = path.extname(file.originalname);
+  //   if (ext !== ".png" && ext !== ".jpg" && ext !== ".jpeg" && ext !== ".webp") {
+  //     cb("Only .png, .jpg, .jpeg and .webp format are allowed!");
+  //   }
+  //   cb(null, new Date().getTime() + ext);
   },
 });
 

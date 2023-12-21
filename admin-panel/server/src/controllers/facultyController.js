@@ -1,5 +1,5 @@
 const Faculty = require("../models/facultyModel");
-
+const csv=require("csvtojson");
 const createFaculty = async (req, res) => {
   try {
     const reqbody = req.body;
@@ -99,6 +99,7 @@ const updateFaculty = async (req, res) => {
   }
 };
 
+/**Update faculty data */
 const updateUser = async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -118,8 +119,7 @@ const updateUser = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "User details Update succesfully!",
-  
-    });
+      });
 
   } catch (error) {
     res.status(400).json({
@@ -129,10 +129,30 @@ const updateUser = async (req, res) => {
   }
 };
 
+/**csv file upload */
+const importFaculty=(req,res)=>{
+try{
+//  if (req.file ) {
+//    reqbody.file = req.file.filename;
+//  }
+ res.status(200).json({
+   success: true,
+   message: "file uploaded successfully",
+ });
+}catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+}
+}
+
+
 module.exports = {
   getfaculty,
   createFaculty,
   deleteFaculty,
   updateFaculty,
   updateUser,
+  importFaculty,
 };

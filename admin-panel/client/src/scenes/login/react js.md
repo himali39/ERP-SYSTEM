@@ -55,4 +55,8 @@ through ingrediention trying but many time showing error in api mutation mutate 
 solves the problem but not a find  proper solution today,tommorrow continue for this error
 
 <!-- 20 Dec -->
-i  work 
+i  rechange api in backend side and react toolkit query api integration  and so many error are fetching
+
+<!-- 21 Dec -->
+i worked in  make update api using mongodb and integration using useLoaction react hook and learn csv to json 
+convert in node js in continue with

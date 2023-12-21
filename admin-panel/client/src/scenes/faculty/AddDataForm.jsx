@@ -3,7 +3,7 @@ import { Box, Button, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import FlexBetween from "../../components/FlexBetween";
 import Header from "../../components/Header";
-import { useAddFacultyMutation } from "../../state/api";
+
 import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,70 +13,61 @@ import axios from "axios";
 function AddDataForm() {
   const theme = useTheme();
   const {
-    setValue,
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  // const [saveFormData] = useAddFacultyMutation();
-  const [data, setdata] = useState();
-  const [update, setupdate] = useState("");
+
+  const [data, setdata] = useState({});
+  const [update, setupdate] = useState(null);
   const { state } = useLocation();
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     setdata({ ...data, [e.target.name]: e.target.value });
   };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setdata({ ...data, facultyImg: file });
+  };
+
   /* ------------------------------ submited data ----------------------------- */
   const onSubmit = () => {
-    // if (update) {
-    //   axios.put(
-    //     `${process.env.REACT_APP_BASE_URL}/faculty/updatefaculty/${id}` +
-    //       update,
-    //     data
-    //   );
-    // } else {
-    // }
     /**Multipart formdata object*/
     let formData = new FormData();
 
     Object.keys(data).forEach(function (key) {
       if (key === "facultyImg") {
-        formData.append(key, data[key][0]);
+        formData.append(key, data[key]);
       } else {
         formData.append(key, data[key]);
       }
     });
-    
+
     if (update) {
       axios
         .put(
-          `${process.env.REACT_APP_BASE_URL}faculty/updatefaculty`,
-          update,
-          data
+          `${process.env.REACT_APP_BASE_URL}faculty/updatefaculty/${update}`,
+          formData
         )
         .then((res) => {
-          setdata([...data, res.data]);
+          // setdata([...data, res.data]);
         });
     } else {
       axios
         .post(`${process.env.REACT_APP_BASE_URL}faculty/addfaculty`, formData)
         .then((res) => {
-          console.log(res);
           // setdata([...data, res.data]);
         });
     }
-
     /**Navigate faculty page*/
-    // navigate("/faculty");
-    // window.location.reload();
-    console.log("data", formData);
+    navigate("/faculty");
   };
 
   useEffect(() => {
-    if (state) {
-      console.log(state, "state");
-      setupdate(state.userData.id);
+    if (state && state.userData) {
+      setupdate(state.userData._id);
       setdata({
         ...data,
         facultyImg: state.userData.facultyImg,
@@ -85,7 +76,7 @@ function AddDataForm() {
         facultyAddress: state.userData.facultyAddress,
       });
     }
-  }, []);
+  }, [state]);
 
   return (
     <Box m="1.5rem 2.5rem">
@@ -107,25 +98,23 @@ function AddDataForm() {
               type="file"
               id="outlined-basic"
               variant="outlined"
+              value={data.image}
               accept="image/*"
-              // inputRef={register("facultyImg")}
-              error={!!errors["facultyImg"]}
-              helperText={errors.image?.message}
-              name="facultyImg"
-              onChange={handleInputChange}
               {...register("facultyImg")}
+              name="facultyImg"
+              onChange={handleFileChange}
             />
 
             <TextField
               fullWidth
-              id="outlined-basic"
+              id="Full Name"
               label="Full Name"
               variant="outlined"
               style={{ marginTop: "20px" }}
-              inputRef={register("facultyName")}
+              {...register("facultyName")}
               error={!!errors["facultyName"]}
               helperText={errors.facultyName?.message}
-              // value={data.facultyName}
+              value={data.facultyName}
               name="facultyName"
               onChange={handleInputChange}
             />
@@ -133,18 +122,15 @@ function AddDataForm() {
             <TextField
               fullWidth
               style={{ marginTop: "20px" }}
-              id="outlined-basic"
+              id="facultySubject"
               label="Subject"
               variant="outlined"
               name="facultySubject"
-              // value={data.facultySubject}
-              inputRef={register("facultySubject")}
+              value={data.facultySubject}
+              {...register("facultySubject")}
               error={!!errors["facultySubject"]}
               helperText={errors.facultySubject?.message}
               onChange={handleInputChange}
-              // {...register("facultySubject", {
-              //   required: "Please enter your Faculty Subject .",
-              // })}
             />
 
             <TextField
@@ -154,14 +140,11 @@ function AddDataForm() {
               label="Resident Address"
               variant="outlined"
               name="facultyAddress"
-              // value={data.facultyAddress}
-              inputRef={register("facultyAddress")}
+              value={data.facultyAddress}
+              {...register("facultyAddress")}
               error={!!errors["facultyAddress"]}
               helperText={errors.facultyAddress?.message}
               onChange={handleInputChange}
-              // {...register("facultyAddress", {
-              //   required: "Please enter your Faculty Address .",
-              // })}
             />
 
             <Box marginTop="1.3rem">
