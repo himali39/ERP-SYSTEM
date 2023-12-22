@@ -17,7 +17,7 @@ import { useTheme } from "@emotion/react";
 import FlexBetween from "../../components/FlexBetween";
 import Header from "../../components/Header";
 import { FileUploadOutlined, PersonAddAlt1Outlined } from "@mui/icons-material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import no_profile from "../../assets/images/no-image.jpeg";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -27,7 +27,6 @@ const Faculty = (data) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const isNonMobile = useMediaQuery("(min-width: 1000px)");
-  // const { isLoading } = useGetFacultyQuery();
   const [formData, setFormData] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
@@ -119,8 +118,7 @@ const Faculty = (data) => {
                     <Typography>
                       {val.facultyImg ? (
                         <img
-                          // src={`${process.env.REACT_APP_BASE_URL_FACULTY}${val.facultyImg}`}
-                          src={`http://localhost:5000/faculty_images/${val.facultyImg}`}
+                          src={`${process.env.REACT_APP_BASE_URL_FACULTY}${val.facultyImg}`}
                           alt={val.facultyName}
                           style={{ height: "220px", width: "100%" }}
                         />

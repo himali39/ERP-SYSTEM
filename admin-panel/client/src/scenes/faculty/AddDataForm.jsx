@@ -58,6 +58,7 @@ function AddDataForm() {
       axios
         .post(`${process.env.REACT_APP_BASE_URL}faculty/addfaculty`, formData)
         .then((res) => {
+          console.log(res.data);
           // setdata([...data, res.data]);
         });
     }

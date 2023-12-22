@@ -3,6 +3,8 @@ const bcrypt = require("bcrypt");
 const moment = require("moment");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const ejs = require("ejs");
+const { sendMail, generateOTP } = require("./emailService");
 dotenv.config;
 
 /* ---------------------------- Register admin Data ---------------------------- */
@@ -104,10 +106,9 @@ const login = async (req, res, next) => {
   }
 };
 
-/**Get admin data */
+/* ----------------------------- Get admin data ----------------------------- */
 const getadmin = async (req, res) => {
   try {
-    
     const admin = await Admin.findById(req.params.id);
 
     if (!admin) {
@@ -118,4 +119,106 @@ const getadmin = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
-module.exports = { login, register, getadmin };
+
+/* ----------------------------- Forgot password mail send ----------------------------- */
+const forgotPasswordEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const admin = await Admin.findOne({ email });
+
+    if (!admin)
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid email Id" });
+
+    const otp = generateOTP();
+    const subject = "Password Reset OTP";
+
+    // Save the OTP in the user document
+    admin.admin_otp = otp; //admin_otp is admin model key name
+    await admin.save();
+
+    // Render the EJS template
+    const emailTemplate = await ejs.renderFile("./src/views/forgotemail.ejs", {
+      otp,
+    });
+
+    // send mail service is use by email service
+    const mailSent = sendMail(email, emailTemplate, subject);
+
+    if (!mailSent) {
+      // If email sending fails, handle the error
+      res.status(404).json({
+        success: false,
+        message: "Failed to send email with OTP",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: `Check your email for the OTP: ${otp}`,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+/* ----------------------------- Reset Password ----------------------------- */
+
+const resetPassword = async (req, res) => {
+  const { email, admin_otp, newPassword, confirmPassword } = req.body;
+
+  try {
+    // Find the user by email and verify OTP
+    const admin = await Admin.findOne({ email });
+
+    if (!admin) {
+      return res
+      .status(404)
+      .json({ success: false, message: "admin not found." });
+    }
+
+    
+    console.log(admin.otp != admin_otp);
+    if (admin_otp.otp != admin_otp) {
+
+      console.log("🚀 ~ admin_otp:", admin_otp)
+      console.log("🚀 ~  admin.otp :", admin.otp )
+      return res.status(401).json({ success: false, message: "Invalid OTP." });
+    }
+    // Check if the new password and confirm password match
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "New password and confirm password do not match.",
+      });
+    }
+
+    // Update the user's password and clear the OTP
+    admin.password = newPassword;
+    admin.otp = null;
+
+    await admin.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password reset successful.",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+module.exports = {
+  login,
+  register,
+  getadmin,
+  forgotPasswordEmail,
+  resetPassword,
+};

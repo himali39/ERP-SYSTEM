@@ -7,12 +7,16 @@ const {
   importFaculty,
   
 } = require("../controllers/facultyController");
-const { upload } = require("../middlwares/upload");
+const { singleFileUpload } = require("../middlwares/upload");
 
 const router = express.Router();
 
 /**Add faculty data */
-router.post("/addfaculty", upload.single("facultyImg"), createFaculty);
+router.post(
+  "/addfaculty",
+  singleFileUpload("/faculty_images/", "facultyImg"),
+  createFaculty
+);
 
 /**Get faculty data list */
 router.get("/facultyList", getfaculty);
@@ -20,10 +24,15 @@ router.get("/facultyList", getfaculty);
 /** faculty data delete */
 router.delete("/deletefaculty/:id", deleteFaculty);
 
-/** faculty data update */
-router.put("/updatefaculty/:id", upload.single("facultyImg"), updateFaculty);
+ /* --------------------------- faculty data update -------------------------- */
+router.put(
+  "/updatefaculty/:id",
+  singleFileUpload("/faculty_images/", "facultyImg"),
+  updateFaculty
+);
 
-router.post("/importFaculty", upload.single("file"), importFaculty);
+ /* --------------------------- upload csv file -------------------------- */
+router.post("/importFaculty", singleFileUpload("/facultyfile","file"), importFaculty);
 
 
 module.exports = router;

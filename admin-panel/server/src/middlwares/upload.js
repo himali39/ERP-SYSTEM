@@ -1,30 +1,28 @@
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
+const express = require("express");
 
-/** Image upload using disk storage */
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null,path.join(__dirname, "../public/faculty_images"))
-    // if (file.fieldname == "facultyImg") {
-    //   fs.mkdirSync(path.join(__dirname, "../public/faculty_images"), {
-    //     recursive: true,
-    //   });
-    //   cb(null, path.join(__dirname, "../public/faculty_images"));
-    // }
-  },
-  filename: function (req, file, cb) {
-    cb(null,file.originalname)
-  //   const ext = path.extname(file.originalname);
-  //   if (ext !== ".png" && ext !== ".jpg" && ext !== ".jpeg" && ext !== ".webp") {
-  //     cb("Only .png, .jpg, .jpeg and .webp format are allowed!");
-  //   }
-  //   cb(null, new Date().getTime() + ext);
-  },
-});
+const singleFileUpload = (basePath, name) => {
+  const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      const dynamicPath = path.join(__dirname, "../public" + basePath);
+      console.log(dynamicPath);
+      // Check if the path exists, if not, create it
+      if (!fs.existsSync(dynamicPath)) {
+        fs.mkdirSync(dynamicPath, { recursive: true });
+      }
+      cb(null, dynamicPath);
+    },
 
-const upload = multer({
-  storage: storage,
-});
+    filename: function (req, file, cb) {
+      cb(null, new Date().getTime() + file.originalname);
+    },
+  });
 
-module.exports = { upload };
+  return multer({
+    storage: storage,
+  }).single(name);
+};
+
+module.exports = { singleFileUpload };

@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import FlexBetween from "./FlexBetween";
 import { ArrowDropDownOutlined, Search } from "@mui/icons-material";
 import profileImage from "../assets/profile.jpeg";
-import { signout } from "../state/index";
+import { logout } from "../state/index";
 
 
 const Navbar = ({ admin, isSidebarOpen, setIsSidebarOpen }) => {
@@ -29,7 +29,7 @@ const Navbar = ({ admin, isSidebarOpen, setIsSidebarOpen }) => {
   const handleClose = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    dispatch(signout());
+    dispatch(logout());
     
   };
   return (

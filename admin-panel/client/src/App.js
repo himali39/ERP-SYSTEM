@@ -11,12 +11,14 @@ import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
 import { themeSettings } from "./theme"; // Make sure to import your theme settings
 import Layout from "./scenes/layout/layout";
 import Dashboard from "./scenes/dashboard/Dashboard";
-import Login from "./scenes/login/Login";
+import Login from "./scenes/auth/Login";
 import Faculty from "./scenes/faculty/Faculty";
 import AddDataForm from "./scenes/faculty/AddDataForm";
-import Register from "./scenes/login/Register";
+import Forgetpassword from "./scenes/auth/Forgotpassword";
 import Events from "./scenes/events/Events";
 import Student from "./scenes/student/Student";
+import Changepassword from "./scenes/auth/Changepassword";
+import Minimallayout from "./scenes/auth/Minimallayout";
 
 function App() {
   const isAuthenticated = useSelector(
@@ -30,11 +32,11 @@ function App() {
     return isAuthenticated || Boolean(localStorage.getItem("accessToken")) ? (
       <Navigate to="/dashboard" replace />
     ) : (
-      <Login />
+      <Minimallayout />
     );
   };
 
-  const PrivateRoute = ({}) => {
+  const PrivateRoute = () => {
     return isAuthenticated || Boolean(localStorage.getItem("accessToken")) ? (
       <Layout />
     ) : (
@@ -50,14 +52,16 @@ function App() {
           <Routes>
             <Route path="/" element={<PublicRoute />}>
               <Route index element={<Login />} />
-              <Route path="/register" element={<Register />} />
+              <Route path="/forget-password" element={<Forgetpassword />} />
             </Route>
+
             <Route element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/faculty" element={<Faculty />} />
               <Route path="/add-data-form" element={<AddDataForm />} />
               <Route path="/events" element={<Events />} />
               <Route path="/student" element={<Student />} />
+              <Route path="/change-password" element={<Changepassword />} />
             </Route>
           </Routes>
         </ThemeProvider>
@@ -67,6 +71,3 @@ function App() {
 }
 
 export default App;
-
-
-

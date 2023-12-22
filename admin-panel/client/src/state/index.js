@@ -47,14 +47,14 @@ const apiSlice = createSlice({
   initialState: {
     loading: false,
     error: null,
-    isAuthenticated: Boolean(localStorage.getItem("accessToken")),
+    isAuthenticated: Boolean(localStorage.getItem("accessToken")),//getitem through check authentication 
   },
   reducers: {
     resetLoginState: (state) => {
       state.loading = false;
       state.error = null;
     },
-    signout: (state) => {
+    logout: (state) => { //
       state.isAuthenticated = false;
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
@@ -81,7 +81,7 @@ const apiSlice = createSlice({
   },
 });
 
-export const { resetLoginState, signout } = apiSlice.actions;
+export const { resetLoginState, logout } = apiSlice.actions;
 export const adminReducer = apiSlice.reducer;
 
 export const { setMode } = globalSlice.actions;

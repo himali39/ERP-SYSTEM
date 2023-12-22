@@ -19,6 +19,7 @@ const adminSchema = new mongoose.Schema(
       required: true,
       min: 5,
     },
+    admin_otp:Number,
     city: String,
     state: String,
     country: String,

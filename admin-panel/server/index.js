@@ -17,13 +17,13 @@ const authRoutes = require("./src/routes/authRoutes.js");
 // const Faculty =require( "./src/models/facultyModel.js");
 //  const Product = require("./src/models/ProductModel.js");
 
-const {
-  // dataUser,
-  // dataOverallStat,
-  // dataTransaction,
-  // datafaculty,
-  // dataProduct,
-} = require("./src/data/data.js");
+// const {
+//   // dataUser,
+//   // dataOverallStat,
+//   // dataTransaction,
+//   // datafaculty,
+//   // dataProduct,
+// } = require("./src/data/data.js");
 
 const app = express();
 /** configuration*/

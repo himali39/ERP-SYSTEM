@@ -103,16 +103,23 @@ const updateFaculty = async (req, res) => {
 /* ----------------------------- csv file upload ---------------------------- */
 const importFaculty = (req, res) => {
   try {
-    let faculty=[];
+    let faculty = [];
 
-    csv().fromFile(req.file.path).then((res)=>{
-      // console.log(res);
-      for(let x=0; x<res.length; x++) {
-        faculty.push({
+    csv()
+      .fromFile(req.file.path)
+      .then(async (res) => {
+        // console.log(res);
+        for (let x = 0; x < res.length; x++) {
+          faculty.push({
+            facultyImg: res[x].facultyImg,
+            facultyName: res[x].facultyName,
+            facultySubject: res[x].facultySubject,
+            facultyAddress: res[x].facultyAddress,
+          });
 
-        })
-      }
-    })
+          await Faculty.insertMany(faculty);
+        }
+      });
 
     res.status(200).json({
       success: true,
