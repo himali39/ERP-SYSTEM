@@ -132,11 +132,16 @@ const forgotPasswordEmail = async (req, res) => {
         .status(401)
         .json({ success: false, message: "Invalid email Id" });
 
-    const otp = generateOTP();
-    const subject = "Password Reset OTP";
+    const otp = generateOTP(); //generate otp code emailService through generate
+    const expirationTime = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes expiration
+
+    admin.otp = {
+      value: otp,
+      expiration: expirationTime,
+    };
 
     // Save the OTP in the user document
-    admin.admin_otp = otp; //admin_otp is admin model key name
+    admin.otp = otp; //otp is admin model key name
     await admin.save();
 
     // Render the EJS template
@@ -145,7 +150,7 @@ const forgotPasswordEmail = async (req, res) => {
     });
 
     // send mail service is use by email service
-    const mailSent = sendMail(email, emailTemplate, subject);
+    const mailSent = sendMail(email, emailTemplate, "Password Reset OTP");
 
     if (!mailSent) {
       // If email sending fails, handle the error
@@ -169,7 +174,7 @@ const forgotPasswordEmail = async (req, res) => {
 /* ----------------------------- Reset Password ----------------------------- */
 
 const resetPassword = async (req, res) => {
-  const { email, admin_otp, newPassword, confirmPassword } = req.body;
+  const { email, otp, newPassword, confirmPassword } = req.body;
 
   try {
     // Find the user by email and verify OTP
@@ -177,18 +182,16 @@ const resetPassword = async (req, res) => {
 
     if (!admin) {
       return res
-      .status(404)
-      .json({ success: false, message: "admin not found." });
+        .status(404)
+        .json({ success: false, message: "admin not found." });
+    }
+    // Check if OTP is valid and not expired
+    if (admin.otp != otp || admin.otpExpiration < Date.now()) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid or expired OTP" });
     }
 
-    
-    console.log(admin.otp != admin_otp);
-    if (admin_otp.otp != admin_otp) {
-
-      console.log("🚀 ~ admin_otp:", admin_otp)
-      console.log("🚀 ~  admin.otp :", admin.otp )
-      return res.status(401).json({ success: false, message: "Invalid OTP." });
-    }
     // Check if the new password and confirm password match
     if (newPassword !== confirmPassword) {
       return res.status(400).json({
@@ -197,9 +200,10 @@ const resetPassword = async (req, res) => {
       });
     }
 
-    // Update the user's password and clear the OTP
+    // Update the user's password and clear the OTP and reset OTP expiration
     admin.password = newPassword;
     admin.otp = null;
+    admin.otpExpiration = null;
 
     await admin.save();
 

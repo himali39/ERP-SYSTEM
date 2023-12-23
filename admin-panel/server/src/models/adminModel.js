@@ -19,7 +19,12 @@ const adminSchema = new mongoose.Schema(
       required: true,
       min: 5,
     },
-    admin_otp:Number,
+    otp: {
+      type: String,
+    },
+    expiration: {
+      type: Date,
+    },
     city: String,
     state: String,
     country: String,
@@ -34,14 +39,14 @@ const adminSchema = new mongoose.Schema(
     accessToken: String,
     refreshToken: String,
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 
 adminSchema.pre("save", async function (next) {
   // var salt = bcrypt.genSaltSync(10);
-  const admin=this;
-  if(admin.isModified("password")) {
-  this.password = await bcrypt.hash(this.password, 10);
+  const admin = this;
+  if (admin.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 10);
   }
 });
 
