@@ -34,6 +34,7 @@ const Forgotpassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.reducer.adminReducer);
+  
 
   /* ------------------------- onsubmit data function ------------------------- */
   const onSubmit = async (data) => {
