@@ -84,8 +84,6 @@ const updateFaculty = async (req, res) => {
       new: true,
     });
 
-    console.log("req.body--------------", req.body);
-
     if (!updateFacultyData) {
       throw new Error("Something went wrong, try again later  ");
     }
